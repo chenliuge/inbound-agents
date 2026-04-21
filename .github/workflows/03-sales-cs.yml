@@ -1,0 +1,39 @@
+name: "Agent 03 · 销售/CS官"
+
+on:
+  workflow_dispatch:
+    inputs:
+      conversation:
+        description: "粘贴客户对话内容"
+        required: true
+        type: string
+
+jobs:
+  run-agent:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt
+      - name: Run agent
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.TRAVEL_AGENTS_PROD }}
+          ANTHROPIC_BASE_URL: "https://yunwu.ai/v1"
+        run: python agents/03-sales-cs/run.py "${{ github.event.inputs.conversation }}"
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "agent03: 销售话术 + 客户洞察"
+          branch: "agent/03-sales-cs-${{ github.run_id }}"
+          title: "[Agent 03] 销售话术 + 客户洞察 · 待审核"
+          body: |
+            - `collaboration/03-sales-support-pool/pending/`（话术）
+            - `collaboration/03-sales-insight-pool/pending/`（洞察）
+          labels: "agent-output,needs-review"

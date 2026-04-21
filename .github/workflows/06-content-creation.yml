@@ -1,0 +1,34 @@
+name: "Agent 06 · 内容制作官"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-agent:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt
+      - name: Run agent
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.TRAVEL_AGENTS_PROD }}
+          ANTHROPIC_BASE_URL: "https://yunwu.ai/v1"
+        run: python agents/06-content-creation/run.py
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "agent06: 文案 + 图片提示词"
+          branch: "agent/06-content-creation-${{ github.run_id }}"
+          title: "[Agent 06] 文案 + 图片提示词 · 待审核"
+          body: |
+            - `collaboration/08-draft-pool/xhs/pending/`（文案）
+            - `collaboration/09-image-prompt-pool/pending/`（图片提示词）
+          labels: "agent-output,needs-review"

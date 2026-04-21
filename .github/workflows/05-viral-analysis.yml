@@ -1,0 +1,49 @@
+name: "Agent 05 · 爆款分析官"
+
+on:
+  workflow_dispatch:
+    inputs:
+      instruction:
+        description: "自然语言指令（如：入境游 GEO 4 步法 / 批量分析本周选题 / 拆这条：https://... ）"
+        required: true
+        type: string
+
+jobs:
+  run-agent:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python deps
+        run: pip install -r requirements.txt
+
+      - name: Run agent
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.TRAVEL_AGENTS_PROD }}
+          ANTHROPIC_BASE_URL: "https://yunwu.ai/v1"
+          SOCIAL_API_TOKEN: ${{ secrets.SOCIAL_API_TOKEN }}
+          AGENT05_INSTRUCTION: ${{ github.event.inputs.instruction }}
+        run: python agents/05-viral-analysis/run.py "$AGENT05_INSTRUCTION"
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "agent05: 爆款分析 - ${{ github.event.inputs.instruction }}"
+          branch: "agent/05-viral-analysis-${{ github.run_id }}"
+          title: "[Agent 05] 爆款分析：${{ github.event.inputs.instruction }} · 待审核"
+          body: |
+            指令：${{ github.event.inputs.instruction }}
+
+            产出路径：`collaboration/06-viral-analysis-pool/pending/`
+
+            若置信度为 🔴 低，报告中会标注"需要人工补充参考"。
+            若视频转写启用，产出中会附口播文字稿。
+          labels: "agent-output,needs-review"

@@ -1,0 +1,174 @@
+lines:
+  customer_industry:
+    label: "客户行业（入境游）"
+    sub_goals:
+      pest:
+        label: "大市场 PEST 变化"
+        frequency: weekly
+        time_window_days: 14
+        sources: [duckduckgo, tavily]
+        queries:
+          - "中国 免签国家 最新"
+          - "入境游 签证便利化 2026"
+          - "入境游 市场规模 数据"
+          - "外国游客 中国 热门城市"
+          - "入境游 数字化 支付 新政"
+
+      top_players:
+        label: "头部旅行社入境业务"
+        frequency: weekly
+        time_window_days: 14
+        sources: [duckduckgo, tavily]
+        queries:
+          - "携程 入境游 新业务"
+          - "中青旅 同程 入境游 动态"
+          - "Klook GetYourGuide 中国市场"
+          - "入境游 旅行社 营收 增长"
+
+      overseas_sentiment:
+        label: "海外对华入境偏好"
+        frequency: weekly
+        time_window_days: 14
+        sources: [duckduckgo, tavily]
+        queries:
+          - "foreign tourists China experience 2026"
+          - "Europe travel to China trend"
+          - "Japan Korea tourists China visit"
+          - "China travel Reddit review"
+          - "best China tour agency review"
+
+      # 国内社媒：了解入境游在国内平台的内容生态
+      domestic_sm_sentiment:
+        label: "国内社媒入境游讨论"
+        frequency: weekly
+        time_window_days: 7
+        sources: [xhs, douyin]
+        queries:
+          - "入境游 外国游客 体验"
+          - "外国人来中国旅游"
+          - "inbound tourism China"
+          - "中国旅游 外国人"
+
+      overseas_sm:
+        label: "客户海外社媒运营"
+        frequency: monthly
+        time_window_days: 30
+        sources: [duckduckgo, tavily]
+        queries:
+          - "China travel TikTok viral"
+          - "Visit China Instagram content"
+          - "中国旅游局 海外社媒 账号"
+          - "China tour YouTube channel growth"
+
+  competitors:
+    label: "同行竞对"
+    sub_goals:
+      web_search:
+        label: "全网竞对扫描"
+        frequency: daily
+        time_window_days: 7
+        sources: [duckduckgo, tavily]
+        queries:
+          - "入境游营销 AI agent 新产品"
+          - "旅游 海外社媒代运营 B端"
+          - "旅游科技 SaaS 融资 2026"
+          - "inbound tourism marketing tool launch"
+          - "China travel agency social media SaaS"
+          - "旅游 MCN 机构 B端服务"
+          - "入境游 创业公司 获客方案"
+          - "travel AI agent China competitor"
+
+      # 抖音：竞对在抖音的内容和产品动态
+      douyin_monitor:
+        label: "抖音竞对动态"
+        frequency: weekly
+        time_window_days: 7
+        sources: [douyin]
+        queries:
+          - "旅游营销 AI工具"
+          - "旅行社 海外获客"
+          - "入境游 营销服务"
+          - "旅游 内容代运营"
+
+      # 小红书：竞对在小红书的产品宣传和客户口碑
+      xhs_monitor:
+        label: "小红书竞对动态"
+        frequency: weekly
+        time_window_days: 7
+        sources: [xhs]
+        queries:
+          - "旅行社营销工具"
+          - "入境游推广方案"
+          - "旅游AI代运营"
+          - "海外社媒运营服务"
+
+      # 微信公众号：监控已知竞对账号的最新文章
+      # ⚠️ 请将下方占位符替换为实际竞对公众号名称或微信ID
+      wechat_accounts:
+        label: "竞对公众号文章监控"
+        frequency: weekly
+        time_window_days: 14
+        sources: [wechat]
+        queries:
+          - "环球旅讯"           # 行业媒体，监控竞对动态报道
+          - "迈点网"             # 旅游科技行业媒体
+          - "旅游圈"             # 入境游行业讨论
+          # ↓ 以下替换为你发现的直接竞对公众号名称
+          # - "竞对公司A官方"
+          # - "竞对产品B"
+
+  ai_industry:
+    label: "AI 行业"
+    sub_goals:
+      tool_updates:
+        label: "大模型和 AI 工具更新"
+        frequency: daily
+        time_window_days: 3
+        sources: [duckduckgo, tavily]
+        queries:
+          - "Claude ChatGPT Gemini 更新 本周"
+          - "Coze Dify AI agent 新版本"
+          - "AI 工具 新功能 发布"
+          - "LangGraph CrewAI 更新"
+
+      vertical_landing:
+        label: "AI+营销垂直落地"
+        frequency: weekly
+        time_window_days: 7
+        sources: [duckduckgo, tavily, douyin, xhs]
+        queries:
+          - "AI agent 营销 落地案例"
+          - "AI 内容营销 品牌 效果"
+          - "AI agent travel marketing case study"
+          - "AI 旅游 内容生成 应用"
+
+      ai_marketing:
+        label: "AI+营销跨行业"
+        frequency: weekly
+        time_window_days: 7
+        sources: [duckduckgo, tavily]
+        queries:
+          - "AI 营销自动化 案例 2026"
+          - "AI 广告投放 工具 效果"
+          - "generative AI marketing ROI"
+          - "AI content creation brand case"
+
+      startup_funding:
+        label: "AI Agent 团队融资"
+        frequency: weekly
+        time_window_days: 14
+        sources: [duckduckgo, tavily]
+        queries:
+          - "AI agent 创业 融资 2026"
+          - "vertical AI startup funding"
+          - "AI 初创公司 新产品 发布"
+
+      trends:
+        label: "AI 宏观趋势"
+        frequency: monthly
+        time_window_days: 30
+        sources: [duckduckgo, tavily]
+        queries:
+          - "AI 行业 趋势 报告 2026"
+          - "generative AI trend forecast"
+          - "AI agent 未来 发展方向"

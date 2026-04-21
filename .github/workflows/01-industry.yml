@@ -1,0 +1,54 @@
+name: "Agent 01 · 行业监控官"
+
+on:
+  workflow_dispatch:
+    inputs:
+      frequency:
+        description: '运行频率（daily / weekly / monthly）'
+        default: 'weekly'
+      time_window_days:
+        description: '检索时间窗口（天，默认14）'
+        default: '14'
+      focus:
+        description: '本期聚焦指令（可选，覆盖默认监控重点）'
+        default: ''
+  schedule:
+    - cron: "0 1 * * 1"  # 每周一 UTC 01:00 = 北京时间周一早9点
+
+jobs:
+  run-agent:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: pip install -r requirements.txt
+
+      - name: Run agent
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.TRAVEL_AGENTS_PROD }}
+          ANTHROPIC_BASE_URL: "https://yunwu.ai/v1"
+          SOCIAL_API_TOKEN: ${{ secrets.SOCIAL_API_TOKEN }}
+          TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
+          RUN_FREQUENCY: ${{ inputs.frequency || 'weekly' }}
+          TIME_WINDOW_DAYS: ${{ inputs.time_window_days || '14' }}
+          RUN_FOCUS: ${{ inputs.focus || '' }}
+        run: python agents/01-industry/run.py
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "agent01: 行业情报报告"
+          branch: "agent/01-industry-${{ github.run_id }}"
+          title: "[Agent 01] 行业情报报告 · 待审核"
+          body: |
+            查看 `collaboration/01-intel-pool/pending/` 中的新文件，确认内容质量后合并。
+          labels: "agent-output,needs-review"

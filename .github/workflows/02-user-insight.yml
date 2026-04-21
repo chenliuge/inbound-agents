@@ -1,0 +1,35 @@
+name: "Agent 02 · 用户洞察官"
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 1 * * 2"  # 每周二 UTC 01:00 = 北京时间周二早9点
+
+jobs:
+  run-agent:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt
+      - name: Run agent
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.TRAVEL_AGENTS_PROD }}
+          ANTHROPIC_BASE_URL: "https://yunwu.ai/v1"
+        run: python agents/02-user-insight/run.py
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "agent02: 用户洞察报告"
+          branch: "agent/02-user-insight-${{ github.run_id }}"
+          title: "[Agent 02] 用户洞察报告 · 待审核"
+          body: |
+            查看 `collaboration/02-insight-pool/pending/` 中的新文件，确认后合并。
+          labels: "agent-output,needs-review"

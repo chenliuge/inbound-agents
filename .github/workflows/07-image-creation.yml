@@ -1,0 +1,33 @@
+name: "Agent 07 · 图片制作官"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-agent:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt
+      - name: Run agent
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.TRAVEL_AGENTS_PROD }}
+          ANTHROPIC_BASE_URL: "https://yunwu.ai/v1"
+        run: python agents/07-image-creation/run.py
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "agent07: 优化图片提示词"
+          branch: "agent/07-image-creation-${{ github.run_id }}"
+          title: "[Agent 07] 图片提示词（优化版）· 待审核"
+          body: |
+            查看 `collaboration/10-image-output-pool/pending/` 中的新文件。
+          labels: "agent-output,needs-review"

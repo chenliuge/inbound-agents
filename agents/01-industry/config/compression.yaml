@@ -1,0 +1,82 @@
+source_tiers:
+  tier_1:
+    label: "官方一手信息"
+    domains:
+      # 政府 / 官方机构
+      - "*.gov.cn"
+      - "*.gov"
+      - "mct.gov.cn"
+      - "cnta.gov.cn"
+      - "ctaweb.org"          # 中国旅行社协会
+      # 主流官方媒体
+      - "xinhuanet.com"
+      - "people.com.cn"
+      - "chinadaily.com.cn"
+      # 入境游竞对官网
+      - "klook.com"
+      - "getyourguide.com"
+      - "viator.com"
+      - "ctrip.com"
+      - "trip.com"
+      - "cyts.cn"             # 中青旅
+      - "cits.com.cn"         # 中旅总社
+      # AI 大厂官方
+      - "anthropic.com"
+      - "openai.com"
+      - "google.com"
+      - "microsoft.com"
+      - "meta.com"
+      # AI 工具官方（IDENTITY 中提到的工具）
+      - "claude.ai"
+      - "coze.com"
+      - "dify.ai"
+
+  tier_2:
+    label: "专业媒体"
+    domains:
+      # 入境游 / 旅游行业垂直媒体（中文）
+      - "traveldailyasia.com"  # 环球旅讯
+      - "maidian.com"          # 迈点网
+      - "ctnews.cn"            # 中国旅游报（文旅部主管）
+      - "lvjie.com.cn"         # 旅界
+      - "itb-china.com"        # ITB China
+      # 旅游行业媒体（英文）
+      - "skift.com"
+      - "phocuswire.com"
+      - "tnooz.com"
+      - "travelmole.com"
+      - "travelweekly.com"
+      - "eturbonews.com"
+      - "hospitalitynet.org"
+      - "businesstravelnews.com"
+      # 科技 / 商业媒体（中文）
+      - "36kr.com"
+      - "huxiu.com"
+      - "latepost.com"
+      # 科技 / 商业媒体（英文）
+      - "techcrunch.com"
+      - "bloomberg.com"
+      - "theverge.com"
+      - "wired.com"
+      - "venturebeat.com"      # AI 落地案例报道多
+
+  tier_3:
+    label: "自媒体 / 博客"
+    domains:
+      - "zhihu.com"
+      - "csdn.net"
+      - "medium.com"
+      - "substack.com"
+      - "jianshu.com"
+      - "juejin.cn"
+
+  tier_4:
+    label: "社交讨论"
+    domains:
+      - "weibo.com"
+      - "xiaohongshu.com"
+      - "reddit.com"
+      - "twitter.com"
+      - "x.com"
+      - "douyin.com"
+      - "tiktok.com"           # 包含官方 newsroom，接受降级（方案A）
