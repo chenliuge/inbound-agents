@@ -1,0 +1,167 @@
+# 目的地本体 · 西安
+# 由产品方维护 · 所有客户共享
+
+id: xian
+name_cn: 西安
+name_en: Xi'an
+alt_names: [Xian, Sian]
+cluster: 古都 · 丝路起点
+province: 陕西
+
+# ──────────────────────────────────────
+# 1. 核心卖点（Strategy / Studio 必读）
+# ──────────────────────────────────────
+key_selling_points:
+  - 兵马俑（世界奇迹，外国人最熟知的中国符号）
+  - 古城墙（全国保存最完整，可骑行 14km）
+  - 回民街美食（羊肉泡馍 / 肉夹馍 / biangbiang 面）
+  - 大唐不夜城（沉浸式夜游，唐装实景）
+  - 华清池 + 长恨歌演出（历史爱情叙事）
+  - 大雁塔（玄奘取经藏经处）
+
+# ──────────────────────────────────────
+# 2. 视觉元素（Visual Agent 图片 prompt 用）
+# ──────────────────────────────────────
+visual_elements:
+  signature_shots:
+    - 金色夕阳 + 古城墙剪影
+    - 胡同烟火气 + 蒸汽升腾的面馆
+    - 兵马俑军阵的纵深震撼
+    - 夜晚大唐不夜城的唐装人潮
+    - 回民街灯笼 + 烤串烟火
+  color_palette: ['#C9A063', '#8B3A1E', '#F5E6D3']
+  mood: 古朴厚重 × 烟火气 × 金黄夕阳
+  avoid: 过度现代 / 钢筋水泥 / 纯冷色调
+
+# ──────────────────────────────────────
+# 3. 文化故事（Studio 深度内容必读）
+# ──────────────────────────────────────
+stories:
+  - 秦始皇统一中国的起点（公元前 221 年）
+  - 丝绸之路从这里发源（张骞出使西域）
+  - 十三朝古都 · 中华文明核心
+  - 玄奘西天取经的出发地（大雁塔藏经）
+  - 唐长安是公元 8 世纪世界最大城市（百万人口）
+  - 1974 年农民打井发现兵马俑（考古意外）
+
+# ──────────────────────────────────────
+# 4. 目标受众匹配度（0-5 分 · Strategy 受众匹配用）
+# ──────────────────────────────────────
+audience_fit:
+  history_lovers: 5
+  family_with_kids: 4       # 兵马俑对孩子震撼，但强度高
+  photographers: 5
+  foodies: 4
+  luxury_travelers: 3
+  backpackers: 5
+  first_time_china: 5       # 首次来华必打卡
+  repeat_china: 3
+
+# ──────────────────────────────────────
+# 5. 季节性（Nudge 时效性 Hook 源）
+# ──────────────────────────────────────
+seasonality:
+  peak_months: [4, 5, 9, 10]        # 春秋最佳
+  shoulder_months: [3, 11]
+  off_months: [7, 8]                # 高温 40°C+
+  avoid_if_possible: [1, 2]         # 寒冷 + 兵马俑人挤人
+  special_events:
+    spring: 樱花 + 梨花（3-4 月）
+    summer: 热（避）
+    autumn: 秋高气爽 + 银杏
+    winter: 大唐不夜城春节灯会（1-2 月）
+
+# ──────────────────────────────────────
+# 6. 推荐时长
+# ──────────────────────────────────────
+recommended_duration:
+  minimum_days: 2
+  sweet_spot: 3-4
+  deep_dive: 5-7  # +华山 / +延安 / +敦煌
+  half_day_skip: 不推荐（半天看不了兵马俑）
+
+# ──────────────────────────────────────
+# 7. 平台适配
+# ──────────────────────────────────────
+platform_fit:
+  tiktok:
+    formats: [兵马俑震撼反应, 美食试吃 reaction, 历史故事短版]
+    best_hook_types: [视觉冲击, 数字锚定, 反常识历史]
+  instagram:
+    formats: [Carousel 美学, 深度文化 Reel, 唐装变装]
+    best_hook_types: [美学构图, 文化深度, 人物故事]
+  youtube_shorts:
+    formats: [5 分钟完整攻略, 兵马俑解说, 美食地图]
+    best_hook_types: [信息密度, 攻略型标题]
+
+# ──────────────────────────────────────
+# 8. 常见内容角度（Viral Hook 库）
+# ──────────────────────────────────────
+content_angles:
+  - angle: 震撼型
+    hook: "First time seeing Terracotta Army"
+    for_audience: first_time_china
+  - angle: 食物型
+    hook: "What Xi'an food really tastes like"
+    for_audience: foodies
+  - angle: 历史型
+    hook: "This was the world's biggest city 1000 years ago"
+    for_audience: history_lovers
+  - angle: 反直觉型
+    hook: "Why Xi'an not Beijing for your first China trip"
+    for_audience: first_time_china
+  - angle: 体验型
+    hook: "Dressed as Tang Dynasty for a night"
+    for_audience: photographers
+  - angle: 家庭型
+    hook: "Took my kids to see 2200 year old soldiers"
+    for_audience: family_with_kids
+
+# ──────────────────────────────────────
+# 9. 价格锚点（USD · Caption 可引用）
+# ──────────────────────────────────────
+pricing_anchor:
+  day_tour_group: 50-120
+  day_tour_private: 150-300
+  2_day_standard: 200-500
+  private_4_day: 800-1500
+  luxury_boutique: 2000+
+  compared_to: "Rome day tour $300 · Tokyo day tour $200"
+
+# ──────────────────────────────────────
+# 10. 常见游客痛点（Help 类 Hook 源）
+# ──────────────────────────────────────
+common_concerns:
+  - 语言（地铁/景点英文不全，打车难度）
+  - 排队（旺季兵马俑 2h+）
+  - 住宿选择（城内历史感 vs 城外方便）
+  - 从哪飞（北京/上海/香港直飞）
+  - 和其他城市怎么连
+  - 兵马俑真的值得吗（心理预期管理）
+  - 回民街是否是游客陷阱
+
+# ──────────────────────────────────────
+# 11. 与其他目的地的差异化
+# ──────────────────────────────────────
+differentiators_vs:
+  beijing: 更古老更完整的古都气质，游客密度低 30%
+  shanghai: 文化深度 vs 上海的现代感
+  chengdu: 历史感更重 vs 成都的生活感
+  guilin: 人文历史 vs 桂林的自然山水
+
+# ──────────────────────────────────────
+# 12. 组合建议
+# ──────────────────────────────────────
+combo_suggestions:
+  - combo: 西安 + 北京
+    duration: 7-9 天
+    angle: 经典双城中国游
+  - combo: 西安 + 成都
+    duration: 8-10 天
+    angle: 古今对比 / 美食双城
+  - combo: 西安 + 敦煌 + 张掖
+    duration: 10-14 天
+    angle: 丝路深度（高溢价产品）
+  - combo: 西安 + 延安
+    duration: 5-6 天
+    angle: 历史深度（适合 history_lovers）

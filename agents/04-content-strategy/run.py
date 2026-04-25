@@ -196,22 +196,19 @@ def build_input(level: Level) -> str:
 
     if level == "quarterly":
         intel = read_all_approved(f"{collab}/01-intel-pool")
-        insight = read_all_approved(f"{collab}/02-insight-pool")
         demand = read_all_approved(f"{collab}/demand-pool")
         history = read_all_approved(f"{collab}/04-strategy-pool")
 
         return (
             f"# 【输入数据】\n\n"
             f"## 1. 行业情报（全部 approved）\n\n{intel or '(暂无)'}\n\n"
-            f"## 2. 用户洞察（全部 approved）\n\n{insight or '(暂无)'}\n\n"
-            f"## 3. 需求池全部 approved 条目\n\n{demand or '(暂无)'}\n\n"
-            f"## 4. 历史季度策略（衔接参考）\n\n{history or '(暂无)'}"
+            f"## 2. 需求池全部 approved 条目\n\n{demand or '(暂无)'}\n\n"
+            f"## 3. 历史季度策略（衔接参考）\n\n{history or '(暂无)'}"
         )
 
     elif level == "monthly":
         quarter_strategy = read_approved(f"{collab}/04-strategy-pool")  # 只读最新一个
         intel = read_all_approved(f"{collab}/01-intel-pool")
-        insight = read_all_approved(f"{collab}/02-insight-pool")
         demand = read_all_approved(f"{collab}/demand-pool")
         last_month = read_approved(f"{collab}/04-monthly-plan-pool")  # 上月只读最新
 
@@ -219,16 +216,14 @@ def build_input(level: Level) -> str:
             f"# 【输入数据】\n\n"
             f"## 1. 当前季度策略（必读，不可偏离）\n\n{quarter_strategy or '(缺失)'}\n\n"
             f"## 2. 行业情报（全部 approved）\n\n{intel or '(暂无)'}\n\n"
-            f"## 3. 用户洞察（全部 approved）\n\n{insight or '(暂无)'}\n\n"
-            f"## 4. 需求池 approved 条目\n\n{demand or '(暂无)'}\n\n"
-            f"## 5. 上月计划（延续性参考）\n\n{last_month or '(暂无)'}"
+            f"## 3. 需求池 approved 条目\n\n{demand or '(暂无)'}\n\n"
+            f"## 4. 上月计划(延续性参考)\n\n{last_month or '(暂无)'}"
         )
 
     elif level == "weekly":
         month_plan = read_approved(f"{collab}/04-monthly-plan-pool")
         quarter_strategy = read_approved(f"{collab}/04-strategy-pool")
         intel = read_all_approved(f"{collab}/01-intel-pool")
-        insight = read_all_approved(f"{collab}/02-insight-pool")
         demand = read_all_approved(f"{collab}/demand-pool")
         recent_topics = read_all_approved(f"{collab}/05-topic-plan-pool")
 
@@ -237,9 +232,8 @@ def build_input(level: Level) -> str:
             f"## 1. 当前月度计划（必读，不可偏离）\n\n{month_plan or '(缺失)'}\n\n"
             f"## 2. 当前季度策略（辅读）\n\n{quarter_strategy or '(缺失)'}\n\n"
             f"## 3. 行业情报（全部 approved）\n\n{intel or '(暂无)'}\n\n"
-            f"## 4. 用户洞察（全部 approved）\n\n{insight or '(暂无)'}\n\n"
-            f"## 5. 需求池 approved 条目\n\n{demand or '(暂无)'}\n\n"
-            f"## 6. 近期历史选题（去重用）\n\n{recent_topics or '(暂无)'}"
+            f"## 4. 需求池 approved 条目\n\n{demand or '(暂无)'}\n\n"
+            f"## 5. 近期历史选题(去重用)\n\n{recent_topics or '(暂无)'}"
         )
 
     else:

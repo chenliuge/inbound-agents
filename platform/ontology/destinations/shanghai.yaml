@@ -1,0 +1,127 @@
+# 目的地本体 · 上海
+id: shanghai
+name_cn: 上海
+name_en: Shanghai
+alt_names: [Shanghai]
+cluster: 现代国际都市 · 东方巴黎
+province: 上海
+
+key_selling_points:
+  - 外滩（万国建筑群 · 夜景灯光秀）
+  - 豫园 + 城隍庙（传统江南园林）
+  - 南京路 + 新天地（购物 + 老建筑改造）
+  - 浦东天际线（东方明珠 / 上海中心 / 金茂）
+  - 法租界老洋房（武康路 / 安福路 · 咖啡文化）
+  - 田子坊 / 西岸美术馆（艺术文化）
+  - 上海小笼包 + 本帮菜 + 高端 fine dining
+
+visual_elements:
+  signature_shots:
+    - 外滩对望浦东夜景（经典打卡）
+    - 法租界梧桐 + 复古咖啡馆
+    - 豫园九曲桥 + 江南园林
+    - 武康大楼转角（ins 级网红地标）
+    - 小笼包蒸笼 + 汤汁拉丝
+  color_palette: ['#1A3A5C', '#D4A574', '#F5F5F5']
+  mood: 现代璀璨 × 复古雅致 × 东方精致
+  avoid: 过度中式 / 纯怀旧滤镜
+
+stories:
+  - 1843 年开埠 · 180 年"远东第一都市"
+  - 法租界是 20 世纪初欧洲人的亚洲乐园
+  - 1930 年代远东文化中心（诞生中国电影）
+  - 改革开放后浦东从农田到天际线（30 年奇迹）
+  - 老克勒文化（上海绅士传统）
+  - 小笼包发源地南翔（百年面点历史）
+
+audience_fit:
+  history_lovers: 3
+  family_with_kids: 4       # 迪士尼 + 科技馆
+  photographers: 5          # 建筑摄影天堂
+  foodies: 5                # 从街头到米其林全覆盖
+  luxury_travelers: 5       # 豪华酒店 + 高端购物
+  backpackers: 3            # 消费高
+  first_time_china: 4       # 首次来华可做入门城市
+  repeat_china: 5           # 永远有新东西
+
+seasonality:
+  peak_months: [4, 5, 9, 10]
+  shoulder_months: [3, 11]
+  off_months: [7, 8]        # 闷热潮湿 + 台风
+  avoid_if_possible: [12, 1, 2]  # 阴冷无暖气
+  special_events:
+    spring: 梧桐新绿 + 法租界樱花
+    summer: 魔都夜生活高峰（避热）
+    autumn: 黄金季节 · 城市最美
+    winter: 豫园春节灯会（华人视角）
+
+recommended_duration:
+  minimum_days: 2
+  sweet_spot: 3-4
+  deep_dive: 5-6            # +苏州 / +杭州一日
+  half_day_skip: 不推荐
+
+platform_fit:
+  tiktok:
+    formats: [天际线延时, 小笼包 reaction, 武康大楼打卡]
+    best_hook_types: [视觉璀璨, 美食, 反常识]
+  instagram:
+    formats: [法租界美学 Carousel, 外滩 Reel, 建筑摄影集]
+    best_hook_types: [建筑美学, 时尚场景]
+  youtube_shorts:
+    formats: [上海 3 天完整攻略, 对比纽约东京, 米其林探店]
+    best_hook_types: [攻略型, 对标型]
+
+content_angles:
+  - angle: 对标型
+    hook: "Shanghai vs New York · which is more futuristic"
+    for_audience: first_time_china
+  - angle: 反差型
+    hook: "The old Shanghai I fell in love with"
+    for_audience: photographers
+  - angle: 美食型
+    hook: "10 soup dumplings in 1 day · which one wins"
+    for_audience: foodies
+  - angle: 法租界型
+    hook: "This looks like Paris but it's Shanghai"
+    for_audience: photographers
+  - angle: 家庭型
+    hook: "Shanghai Disney + Great Wall in one trip"
+    for_audience: family_with_kids
+  - angle: 商务延伸型
+    hook: "24 hours in Shanghai after my business meeting"
+    for_audience: business_extension
+
+pricing_anchor:
+  day_tour_group: 80-180
+  day_tour_private: 250-500
+  3_day_standard: 400-800
+  private_5_day: 1200-2500
+  luxury_boutique: 3500+   # Peninsula / Waldorf / Bulgari
+  compared_to: "Tokyo 3d $600 · Singapore 3d $700 · NYC 3d $800"
+
+common_concerns:
+  - 消费水平（一线城市价格 · 不便宜）
+  - 雨季（6-9 月）
+  - 语言（比其他城市英文友好但不全）
+  - 景点距离（打车 or 地铁）
+  - 支付（外国人境外卡扫码逻辑）
+
+differentiators_vs:
+  beijing: 现代 + 国际 vs 北京的皇家厚重
+  hongkong: 内地视角 + 本土文化 vs 香港的殖民混搭
+  tokyo: 规模更大 + 价格 60% + 历史跨度更大
+
+combo_suggestions:
+  - combo: 上海 + 苏州 + 杭州
+    duration: 6-7 天
+    angle: 江南经典三角（华东深度首选）
+  - combo: 上海 + 北京
+    duration: 7-9 天
+    angle: 古今双都
+  - combo: 上海 + 桂林
+    duration: 8-10 天
+    angle: 都市 + 自然反差
+  - combo: 上海 + 香港
+    duration: 6-8 天
+    angle: 两个国际都市对比

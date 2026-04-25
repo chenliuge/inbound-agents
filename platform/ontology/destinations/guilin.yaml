@@ -1,0 +1,126 @@
+# 目的地本体 · 桂林
+id: guilin
+name_cn: 桂林
+name_en: Guilin
+alt_names: [Kweilin]
+cluster: 山水奇观 · 诗意中国
+province: 广西
+
+key_selling_points:
+  - 漓江山水（阳朔段 · 中国人民币 20 元背景图）
+  - 龙脊梯田（平安寨 / 金坑 · 不同季节不同景）
+  - 阳朔西街（国际青年聚集地）
+  - 象鼻山 / 两江四湖（市区核心）
+  - 竹筏漂流（经典 20 元人民币视角）
+  - 夜游漓江 + 印象刘三姐实景演出
+
+visual_elements:
+  signature_shots:
+    - 晨雾中的漓江喀斯特山峰
+    - 竹筏 + 渔夫 + 鸬鹚
+    - 龙脊梯田春水 / 夏绿 / 秋金 / 冬雪
+    - 阳朔西街夜景 · 中西混搭
+    - 20 元人民币同款机位
+  color_palette: ['#6B8E7F', '#2C3E3A', '#D8E3DC']
+  mood: 山水写意 × 雾气缭绕 × 冷调青绿
+  avoid: 饱和度过高 / HDR 假色
+
+stories:
+  - "桂林山水甲天下 · 阳朔山水甲桂林"（千年口碑）
+  - 漓江被 CNN 评为 "世界最美十条河"
+  - 渔夫 + 鸬鹚捕鱼是 1300 年传统
+  - 20 元人民币背景图（国民级认知）
+  - 印象刘三姐是张艺谋 2003 年作品
+  - 龙脊梯田最早由壮族瑶族 700 年前开垦
+
+audience_fit:
+  history_lovers: 2
+  family_with_kids: 4       # 竹筏 + 梯田对孩子友好
+  photographers: 5          # 摄影师必朝圣
+  foodies: 3                # 啤酒鱼有名但不如川粤
+  luxury_travelers: 3
+  backpackers: 5            # 阳朔西街背包圣地
+  first_time_china: 3       # 不如北京西安必要
+  repeat_china: 5           # 二次来华首选深度
+
+seasonality:
+  peak_months: [4, 5, 9, 10]
+  shoulder_months: [3, 11]
+  off_months: [7, 8]        # 暴雨 + 水位影响漂流
+  avoid_if_possible: [12, 1, 2]  # 梯田冬季单调
+  special_events:
+    spring: 梯田灌水 + 山花（4-5 月绝美）
+    summer: 绿色梯田 + 漓江水量充沛
+    autumn: 金色梯田（9-10 月世界级）
+    winter: 梯田雪景（罕见但震撼）
+
+recommended_duration:
+  minimum_days: 2
+  sweet_spot: 3-4
+  deep_dive: 5-7            # +龙脊 + 龙胜温泉
+  half_day_skip: 不适合
+
+platform_fit:
+  tiktok:
+    formats: [漓江航拍炸裂开场, 竹筏 POV, 梯田延时]
+    best_hook_types: [视觉震撼, 20 元背景图梗]
+  instagram:
+    formats: [梯田四季对比 Carousel, 漓江摄影集 Reel]
+    best_hook_types: [自然美学, 诗意场景]
+  youtube_shorts:
+    formats: [20 元人民币打卡攻略, 阳朔 3 天自由行]
+    best_hook_types: [攻略型, 文化对比]
+
+content_angles:
+  - angle: 人民币同款型
+    hook: "Finding the 20 yuan bill's hidden landscape"
+    for_audience: photographers
+  - angle: 诗意型
+    hook: "Why Chinese poets wrote about this place for 1000 years"
+    for_audience: repeat_china
+  - angle: 家庭型
+    hook: "Bamboo rafting with kids · is it safe?"
+    for_audience: family_with_kids
+  - angle: 季节型
+    hook: "Terraced fields in 4 seasons · which is best"
+    for_audience: photographers
+  - angle: 背包型
+    hook: "Yangshuo is where backpackers find their home in China"
+    for_audience: backpackers
+  - angle: 反常识型
+    hook: "Skip the Great Wall · come to Guilin instead"
+
+pricing_anchor:
+  day_tour_group: 40-100
+  day_tour_private: 120-250
+  3_day_standard: 250-500
+  private_5_day: 800-1500
+  luxury_boutique: 1800+
+  compared_to: "Halong Bay Vietnam 3d $400 · Ha Giang 3d $350"
+
+common_concerns:
+  - 天气（雨多 · 景色变化大）
+  - 阳朔还是市区住宿
+  - 西街是否商业化过度
+  - 梯田徒步体力要求
+  - 从哪飞（桂林两江机场 / 高铁）
+  - 和北京西安怎么搭配
+
+differentiators_vs:
+  yunnan: 纯水墨写意 vs 云南的多元民族
+  zhangjiajie: 更温柔 vs 张家界的奇峰险峻
+  huangshan: 水 vs 山的区别
+
+combo_suggestions:
+  - combo: 桂林 + 阳朔 + 龙脊
+    duration: 5-6 天
+    angle: 桂林深度三件套
+  - combo: 桂林 + 香港
+    duration: 6-8 天
+    angle: 反差体验（山水 + 都市）
+  - combo: 桂林 + 上海 + 北京
+    duration: 10-12 天
+    angle: 三城经典（+自然加分）
+  - combo: 桂林 + 大理丽江
+    duration: 8-10 天
+    angle: 自然深度路线

@@ -1,0 +1,2028 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>入境游内容工作台</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --bg: #FAF9F5;
+    --bg-subtle: #F4F2EC;
+    --bg-deep: #EEEBE1;
+    --card: #FFFFFF;
+    --border: #E5E3DC;
+    --border-strong: #CFCCC0;
+    --text: #1F1E1B;
+    --text-muted: #6F6E68;
+    --text-subtle: #A39F94;
+    --accent: #C15F3C;
+    --accent-bg: #FAF0EA;
+    --success: #6B7F5C;
+    --warning: #C9894A;
+    --danger: #B85C5C;
+  }
+  html, body { height: 100%; margin: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 13.5px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .font-serif { font-family: Georgia, "Times New Roman", "Songti SC", serif; }
+  .font-mono { font-family: ui-monospace, "SF Mono", "JetBrains Mono", monospace; }
+
+  .scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+  .scrollbar::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+  .scrollbar::-webkit-scrollbar-track { background: transparent; }
+
+  /* Agent 卡片 */
+  .agent-card {
+    border: 1px solid var(--border);
+    background: transparent;
+    border-radius: 8px;
+    padding: 11px 13px;
+    transition: all .15s ease;
+    cursor: pointer;
+    position: relative;
+  }
+  .agent-card:hover { border-color: var(--border-strong); background: var(--bg-subtle); }
+  .agent-card.active {
+    border-color: var(--text);
+    background: var(--card);
+  }
+  .agent-card.active .agent-icon {
+    color: var(--text);
+    border-color: var(--text);
+  }
+  .agent-icon {
+    width: 28px; height: 28px;
+    border: 1px solid var(--border-strong);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted);
+    background: var(--card);
+    flex-shrink: 0;
+    transition: all .15s ease;
+  }
+
+  /* 派单徽章 */
+  .pending-badge {
+    position: absolute;
+    top: -6px; right: -6px;
+    background: var(--accent);
+    color: white;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 999px;
+    min-width: 18px;
+    text-align: center;
+    line-height: 1.3;
+    box-shadow: 0 0 0 2px var(--bg);
+  }
+
+  /* Freq badge */
+  .freq-badge {
+    font-size: 9.5px;
+    color: var(--text-subtle);
+    border: 1px solid var(--border);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  /* 状态圆点 */
+  .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+  .dot-success { background: var(--success); }
+  .dot-pending { background: var(--warning); }
+  .dot-idle { background: var(--text-subtle); }
+  .dot-rejected { background: var(--danger); }
+
+  /* 按钮 */
+  .btn {
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all .12s ease;
+    display: inline-flex; align-items: center; gap: 6px;
+    line-height: 1;
+  }
+  .btn-primary { background: var(--text); color: var(--bg); }
+  .btn-primary:hover { background: #000; }
+  .btn-primary:disabled { background: var(--text-muted); cursor: not-allowed; }
+  .btn-secondary { background: transparent; color: var(--text); border-color: var(--border-strong); }
+  .btn-secondary:hover { background: var(--bg-subtle); border-color: var(--text-muted); }
+  .btn-ghost { background: transparent; color: var(--text-muted); border-color: transparent; }
+  .btn-ghost:hover { background: var(--bg-subtle); color: var(--text); }
+  .btn-success { background: var(--success); color: var(--bg); border-color: var(--success); }
+  .btn-success:hover { background: #556649; }
+  .btn-danger { background: transparent; color: var(--danger); border-color: #E6C8C8; }
+  .btn-danger:hover { background: #FBF4F4; }
+  .btn-accent { background: var(--accent); color: white; border-color: var(--accent); }
+  .btn-accent:hover { background: #A24E2F; }
+
+  /* Tabs */
+  .tab-bar {
+    display: inline-flex;
+    gap: 2px;
+    padding: 3px;
+    background: var(--bg-deep);
+    border-radius: 8px;
+  }
+  .tab-btn {
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-weight: 500;
+    transition: all .12s ease;
+    border: none;
+    background: transparent;
+  }
+  .tab-btn.active {
+    background: var(--card);
+    color: var(--text);
+    box-shadow: 0 1px 0 var(--border);
+  }
+
+  /* 子线切换（A4 用） */
+  .subline-bar {
+    display: inline-flex;
+    gap: 2px;
+    padding: 3px;
+    background: var(--bg-deep);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  .subline-btn {
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-weight: 500;
+    transition: all .12s ease;
+    border: none;
+    background: transparent;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .subline-btn.active {
+    background: var(--card);
+    color: var(--text);
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  }
+
+  /* Input */
+  input[type="text"], select, textarea {
+    padding: 8px 11px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--card);
+    font-size: 13px;
+    color: var(--text);
+    font-family: inherit;
+    width: 100%;
+    transition: border-color .12s ease;
+  }
+  textarea { resize: vertical; line-height: 1.55; }
+  select {
+    padding: 6px 28px 6px 10px;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236F6E68' stroke-width='1.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 9px center;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--text);
+  }
+
+  /* Chip */
+  .chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 9px;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    background: var(--card);
+  }
+  .chip-success { color: var(--success); border-color: #CAD5BF; background: #F4F7EF; }
+  .chip-pending { color: var(--warning); border-color: #E8D4B5; background: #FAF4EA; }
+  .chip-rejected { color: var(--danger); border-color: #E6C8C8; background: #FBF4F4; }
+
+  /* Markdown */
+  .md-output {
+    font-family: inherit;
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--text);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .md-output h1 { font-family: Georgia, serif; font-size: 1.4rem; font-weight: 600; margin: 0.5rem 0 0.75rem; letter-spacing: -0.01em; }
+  .md-output h2 { font-family: Georgia, serif; font-size: 1.1rem; font-weight: 600; margin: 1.1rem 0 0.4rem; color: var(--text); padding-bottom: 4px; border-bottom: 1px solid var(--border); }
+  .md-output h3 { font-size: 1rem; font-weight: 600; margin: 0.75rem 0 0.25rem; color: var(--text); }
+  .md-output strong { color: var(--text); font-weight: 600; }
+  .md-output code { background: var(--bg-deep); padding: 1px 5px; border-radius: 4px; font-size: 12px; font-family: ui-monospace, monospace; }
+  .md-output blockquote { border-left: 2px solid var(--border-strong); padding-left: 12px; color: var(--text-muted); margin: 0.5rem 0; }
+  .md-output table { border-collapse: collapse; width: 100%; margin: 0.5rem 0; font-size: 12.5px; }
+  .md-output th, .md-output td { border: 1px solid var(--border); padding: 6px 10px; text-align: left; }
+  .md-output th { background: var(--bg-subtle); font-weight: 600; }
+
+  .typing-cursor::after { content: "▌"; color: var(--accent); animation: blink 1s steps(1) infinite; margin-left: 1px; font-weight: 300; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .toast {
+    animation: toastIn .22s cubic-bezier(.2,.9,.3,1);
+    background: var(--text);
+    color: var(--bg);
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    box-shadow: 0 4px 12px rgba(31, 30, 27, 0.18);
+    max-width: 340px;
+  }
+  @keyframes toastIn {
+    from { transform: translateY(10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .modal-backdrop { background: rgba(31, 30, 27, 0.32); backdrop-filter: blur(3px); }
+
+  .tpl-item {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: all .12s ease;
+    background: transparent;
+  }
+  .tpl-item:hover { border-color: var(--border-strong); background: var(--bg-subtle); }
+
+  .label {
+    font-size: 10.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-subtle);
+  }
+
+  .border-app { border-color: var(--border); }
+  .bg-app { background: var(--bg); }
+  .bg-app-subtle { background: var(--bg-subtle); }
+  .bg-app-deep { background: var(--bg-deep); }
+  .bg-app-card { background: var(--card); }
+  .text-app { color: var(--text); }
+  .text-app-muted { color: var(--text-muted); }
+  .text-app-subtle { color: var(--text-subtle); }
+  .text-accent { color: var(--accent); }
+
+  .ins-btn {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    text-align: left;
+    background: transparent;
+    cursor: pointer;
+    transition: all .12s ease;
+  }
+  .ins-btn:hover { border-color: var(--border-strong); background: var(--bg-subtle); }
+  .ins-btn.active {
+    border-color: var(--text);
+    background: var(--card);
+    box-shadow: inset 0 0 0 1px var(--text);
+  }
+
+  /* 反哺卡片 */
+  .feedback-card {
+    background: linear-gradient(to bottom right, var(--accent-bg), var(--bg-subtle));
+    border: 1px solid #EED6CB;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-top: 12px;
+  }
+</style>
+</head>
+<body class="overflow-hidden">
+
+<header class="h-12 border-b border-app flex items-center justify-between px-5 bg-app">
+  <div class="flex items-center gap-4">
+    <div class="flex items-center gap-2.5">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+        <circle cx="12" cy="12" r="3.5"/>
+        <circle cx="12" cy="12" r="8"/>
+        <line x1="12" y1="12" x2="19" y2="5"/>
+      </svg>
+      <span class="font-serif text-[15px] font-semibold tracking-tight">入境游内容工作台</span>
+    </div>
+    <span class="text-[11px] text-app-subtle">v0.3 · 5 Agent Pipeline</span>
+  </div>
+  <div class="flex items-center gap-1.5">
+    <button id="session-btn" class="btn btn-ghost text-[12.5px]">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      会话历史
+    </button>
+    <div class="w-7 h-7 rounded-full border border-app flex items-center justify-center text-[11px] font-medium text-app-muted">NK</div>
+  </div>
+</header>
+
+<main class="grid" style="grid-template-columns: 260px 1fr 320px; height: calc(100vh - 3rem);">
+
+  <aside class="border-r border-app overflow-y-auto scrollbar p-4">
+    <div class="label mb-2.5 px-1">Pipeline · 5 Agents</div>
+    <div id="agent-list" class="space-y-2"></div>
+
+    <div class="mt-6 pt-4 border-t border-app">
+      <div class="label mb-2 px-1">其他</div>
+      <div class="space-y-1">
+        <button class="w-full btn btn-ghost justify-start text-[12.5px] text-app-muted" onclick="showToast('Onboarding 向导：人群定位 / 支柱配比 / 品牌语气，一次性配置')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+          知识库配置
+        </button>
+        <button class="w-full btn btn-ghost justify-start text-[12.5px] text-app-muted" onclick="showToast('团队设置')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="7" r="2.5"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5M14.5 20c0-2 1.5-3.5 4-3.5s4 1.5 4 3.5"/></svg>
+          团队成员
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <section class="flex flex-col overflow-hidden bg-app">
+
+    <div class="h-14 border-b border-app flex items-center justify-between px-6 flex-shrink-0 bg-app">
+      <div class="flex items-center gap-3">
+        <div id="current-agent-icon" class="agent-icon" style="width:32px;height:32px;"></div>
+        <div>
+          <div class="font-serif font-semibold text-[15px] tracking-tight">
+            <span id="current-agent-name"></span>
+          </div>
+          <div id="current-agent-desc" class="text-[11.5px] text-app-muted mt-0.5"></div>
+        </div>
+      </div>
+      <div class="tab-bar">
+        <button id="mode-fixed" class="tab-btn active" onclick="setMode('fixed')">固定指令</button>
+        <button id="mode-free" class="tab-btn" onclick="setMode('free')">自由对话</button>
+      </div>
+    </div>
+
+    <div id="workspace" class="flex-1 overflow-y-auto scrollbar px-6 py-5">
+
+      <div id="fixed-mode" class="space-y-5 max-w-3xl">
+
+        <!-- A4 专用 · 子线切换 -->
+        <div id="subline-area" class="hidden">
+          <div class="label mb-2">产线选择</div>
+          <div id="subline-tabs" class="subline-bar"></div>
+          <div id="subline-inflow" class="mt-2.5 text-[11.5px] text-app-muted"></div>
+        </div>
+
+        <!-- 上游派单提示 -->
+        <div id="inflow-hint" class="hidden p-3 border border-app rounded-lg bg-app-subtle text-[12.5px]">
+          <span id="inflow-text"></span>
+        </div>
+
+        <div>
+          <div class="label mb-2">预装指令 · 一键加载</div>
+          <div id="instruction-picker" class="grid grid-cols-3 gap-2"></div>
+        </div>
+
+        <div>
+          <div class="label mb-2">参数化插槽</div>
+          <div id="slots-area" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <div class="label">指令预览 · 可直接修改</div>
+            <button class="text-[11.5px] text-app-muted hover:text-app" onclick="resetPrompt()">↺ 重置</button>
+          </div>
+          <textarea id="prompt-preview" rows="7"></textarea>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button id="run-btn" class="btn btn-primary" onclick="runAgent()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+            运行
+          </button>
+          <span class="text-[11.5px] text-app-subtle ml-1">预计 30–60 秒</span>
+        </div>
+      </div>
+
+      <div id="free-mode" class="hidden space-y-3 max-w-3xl">
+        <div class="p-3.5 border border-app rounded-lg text-[13px] text-app-muted bg-app-subtle">
+          <span class="font-semibold text-app">自由对话模式</span>
+          <span class="mx-1">·</span>
+          直接描述需求，Agent 会基于已 approve 的历史产出 + 知识库回复。关键决策会自动写入 session-log。
+        </div>
+        <div id="free-chat" class="space-y-4"></div>
+        <div class="flex gap-2 items-end">
+          <textarea id="free-input" rows="2" placeholder="例如：把上次的周选题按'北美家庭'细分重做一版..."></textarea>
+          <button class="btn btn-primary self-stretch px-5" onclick="sendFreeMessage()">发送</button>
+        </div>
+      </div>
+
+      <div id="output-area" class="hidden mt-8 max-w-3xl">
+        <div class="border border-app rounded-xl bg-app-card">
+          <div class="px-5 py-3 border-b border-app flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span id="output-dot" class="dot dot-pending"></span>
+              <span class="font-serif font-semibold text-[13.5px]">Agent 输出</span>
+              <span id="output-status" class="chip chip-pending">pending · 待审核</span>
+            </div>
+            <span id="output-meta" class="text-[11px] text-app-subtle"></span>
+          </div>
+          <div id="output-content" class="md-output px-6 py-5"></div>
+
+          <!-- A5 专用：反哺卡片 -->
+          <div id="feedback-card" class="hidden mx-5 mb-4">
+            <div class="feedback-card">
+              <div class="flex items-center gap-2 mb-2.5">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8"><path d="M4 4l16 16M4 20l16-16"/></svg>
+                <span class="font-serif font-semibold text-[13px] text-app">一键反哺 · 下周输入</span>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <button class="btn btn-accent" onclick="applyFeedback('A1')">
+                  → 应用到 Radar 扫描
+                </button>
+                <button class="btn btn-accent" onclick="applyFeedback('A2')">
+                  → 应用到 Strategy 选题
+                </button>
+                <button class="btn btn-secondary" onclick="applyFeedback('A4')">
+                  → 应用到 Production SOP
+                </button>
+              </div>
+              <div class="text-[11px] text-app-subtle mt-2">点击后下周该 Agent 的输入中会自动带入本周的反馈结论</div>
+            </div>
+          </div>
+
+          <div class="px-5 py-3 border-t border-app flex items-center gap-2">
+            <button class="btn btn-success" onclick="approveOutput()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Approve
+            </button>
+            <button id="handoff-btn" class="btn btn-primary hidden" onclick="handoffOutput()">
+              → 派给下一环
+            </button>
+            <button class="btn btn-danger" onclick="rejectOutput()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2M5 6l1 14a2 2 0 002 2h8a2 2 0 002-2l1-14"/></svg>
+              打回
+            </button>
+            <button class="btn btn-secondary" onclick="setMode('free')">
+              追问微调
+            </button>
+            <div class="ml-auto text-[11px] text-app-subtle">Token <span id="token-usage" class="font-mono">—</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <aside class="border-l border-app overflow-hidden flex flex-col bg-app">
+    <div class="h-14 border-b border-app flex items-center px-4 flex-shrink-0">
+      <div class="tab-bar text-[12px]">
+        <button class="tab-btn active" data-tab="content" onclick="setLibTab('content', event)">内容</button>
+        <button class="tab-btn" data-tab="image" onclick="setLibTab('image', event)">图片</button>
+        <button class="tab-btn" data-tab="video" onclick="setLibTab('video', event)">混剪</button>
+        <button class="tab-btn" data-tab="viral" onclick="setLibTab('viral', event)">爆款</button>
+        <button class="tab-btn" data-tab="assets" onclick="setLibTab('assets', event)">资产</button>
+      </div>
+    </div>
+    <div id="library-list" class="flex-1 overflow-y-auto scrollbar p-3 space-y-2"></div>
+  </aside>
+</main>
+
+<div id="toast-container" class="fixed bottom-5 right-5 space-y-2 z-50"></div>
+
+<div id="modal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-40">
+  <div class="bg-app-card rounded-xl border border-app w-[680px] max-h-[82vh] flex flex-col">
+    <div class="px-5 py-4 border-b border-app flex items-center justify-between">
+      <h3 id="modal-title" class="font-serif font-semibold text-[15px]"></h3>
+      <button onclick="closeModal()" class="btn btn-ghost p-1.5">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div id="modal-body" class="px-6 py-5 overflow-y-auto scrollbar md-output"></div>
+    <div id="modal-footer" class="px-5 py-3 border-t border-app flex justify-end gap-2"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   Icons
+   ============================================================ */
+const ICONS = {
+  A1: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7.5"/><line x1="12" y1="12" x2="18" y2="6"/></svg>`,
+  A2: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="4" width="16" height="16" rx="2"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="12" y1="4" x2="12" y2="20"/></svg>`,
+  A3: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="11" cy="11" r="6.5"/><line x1="16" y1="16" x2="20.5" y2="20.5"/></svg>`,
+  A4: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="5" width="18" height="6" rx="1.5"/><rect x="3" y="13" width="18" height="6" rx="1.5"/></svg>`,
+  A5: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><line x1="4" y1="20" x2="20" y2="20"/><line x1="4" y1="4" x2="4" y2="20"/><rect x="7" y="13" width="2.5" height="7"/><rect x="11.5" y="9" width="2.5" height="11"/><rect x="16" y="15" width="2.5" height="5"/></svg>`
+};
+
+/* ============================================================
+   AGENTS · 5 Agent Pipeline
+   ============================================================ */
+
+const AGENTS = {
+  A1: {
+    icon: ICONS.A1,
+    name: 'Radar',
+    nameCn: '雷达',
+    desc: '感知市场信号 · 不做选题决策',
+    freq: '周',
+    pending: 0,
+    lastRun: '今晨',
+    status: 'success',
+    handoffTo: 'A2',
+    instructions: [
+      {
+        id: 'weekly-brief',
+        name: '本期市场画像周报',
+        tip: '人群 + 热点 + 竞对 三合一',
+        template: `产出本期海外市场画像周报（仅含情报信号，不含选题建议）。
+
+客源国：{{country}}
+时间窗：近 {{days}} 天
+关注平台：{{platforms}}
+
+输出结构：
+1. 目标人群需求变化（搜索增量 / 评论痛点 / 情绪）
+2. 平台热点聚合（Top 爆款共性 + 算法动向 + 风险信号）
+3. 竞对动作追踪（3 家同赛道 + 2 家跨赛道）
+
+**严格原则**：只给信号，不给选题。选题建议交给 Strategy。`,
+        slots: [
+          { key: 'country', label: '客源国', options: ['美国', '英国', '日本', '韩国', '新加坡'], default: '美国' },
+          { key: 'days', label: '时间窗', options: ['7', '14', '30'], default: '14' },
+          { key: 'platforms', label: '平台', options: ['TikTok + IG', 'TikTok + IG + YouTube', '全平台'], default: 'TikTok + IG' },
+        ]
+      },
+      {
+        id: 'audience-scan',
+        name: '人群需求扫描',
+        tip: '搜索 / 痛点 / 情绪',
+        template: `聚焦 {{country}} 市场，扫描入境游客近 {{days}} 天的需求变化。
+
+输出：
+1. 搜索词增量 Top 10（含周环比）
+2. 评论区高频痛点聚类
+3. 情绪变化（认知期 / 考虑期 / 行动期 的人群占比）`,
+        slots: [
+          { key: 'country', label: '客源国', options: ['美国', '英国', '日本', '韩国', '新加坡'], default: '美国' },
+          { key: 'days', label: '时间窗', options: ['7', '14', '30'], default: '14' },
+        ]
+      },
+      {
+        id: 'competitor-track',
+        name: '竞对动作追踪',
+        tip: '3 家同赛道 + 2 家跨赛道',
+        template: `追踪近 {{days}} 天指定竞对的海外社媒动作。
+
+竞对列表：{{list}}
+
+输出：发布节奏变化 / 新内容方向 / 新账号信号 / 异常数据`,
+        slots: [
+          { key: 'list', label: '竞对', options: ['同赛道 3 家', '跨赛道 2 家', '全部 5 家'], default: '全部 5 家' },
+          { key: 'days', label: '时间窗', options: ['14', '30', '60'], default: '30' },
+        ]
+      }
+    ]
+  },
+
+  A2: {
+    icon: ICONS.A2,
+    name: 'Strategy',
+    nameCn: '内容策略',
+    desc: '把市场信号转为选题决策',
+    freq: '月 / 周',
+    pending: 1,
+    pendingFrom: 'A1',
+    pendingHint: 'Radar 本周市场画像已 approved，可基于此生成选题',
+    lastRun: '昨天',
+    status: 'success',
+    handoffTo: 'A3',
+    instructions: [
+      {
+        id: 'weekly-topics',
+        name: '本周选题建议',
+        tip: '5-10 条带业务挂钩字段',
+        template: `产出本周选题建议。
+
+主推客源国：{{country}}
+平台组合：{{platforms}}
+选题数量：{{count}} 条
+
+输入：
+- Radar 本周市场画像
+- 本月 campaign 主题
+- Analytics 上周反哺建议
+
+输出选题表，字段：优先级 / 标题 / 归属支柱 / 平台 / 受众 / Hook / 业务价值 / 是否需爆款分析`,
+        slots: [
+          { key: 'country', label: '客源国', options: ['美国', '日本', '韩国', '英国', '新加坡', '多国轮动'], default: '美国' },
+          { key: 'platforms', label: '平台', options: ['TikTok + IG', 'TikTok + IG + YouTube', '全平台'], default: 'TikTok + IG' },
+          { key: 'count', label: '数量', options: ['5', '7', '10'], default: '7' },
+        ]
+      },
+      {
+        id: 'monthly-plan',
+        name: '月度内容计划',
+        tip: 'Campaign 主题 + W1-W4 节奏',
+        template: `制定下月内容计划，基于季度策略 + 近期 Radar + Analytics 月报。
+
+核心目标：{{goal}}
+主攻市场：{{country}}
+主力产品：{{product}}
+
+输出：月度 campaign 主题 + 三大子方向 + W1-W4 产出节奏表 + 月底自检指标`,
+        slots: [
+          { key: 'goal', label: '核心目标', options: ['涨粉', '询盘转化', '品牌认知', '多平台同步'], default: '询盘转化' },
+          { key: 'country', label: '客源国', options: ['美国', '英国', '日本', '韩国', '新加坡'], default: '美国' },
+          { key: 'product', label: '产品', options: ['定制游', '小团游', '标准团', '主题深度游'], default: '小团游' },
+        ]
+      },
+      {
+        id: 'quarterly-strategy',
+        name: '季度内容策略',
+        tip: '阶段诊断 + 支柱配比',
+        template: `产出本季度内容策略（季度内定死，不得调整）。
+
+核心挑战：{{challenge}}
+标杆借鉴：{{benchmark}}
+
+输出：账号阶段诊断 + 季度核心方向 + 内容支柱配比 + 平台分配 + 三个月度主题线`,
+        slots: [
+          { key: 'challenge', label: '挑战', options: ['从 0 起步', '跨越平台期', '突破转化瓶颈', '进军新市场'], default: '从 0 起步' },
+          { key: 'benchmark', label: '标杆', options: ['China Highlights', 'WildChina', '同赛道小账号', '跨赛道（日本游）'], default: 'China Highlights' },
+        ]
+      }
+    ]
+  },
+
+  A3: {
+    icon: ICONS.A3,
+    name: 'Viral',
+    nameCn: '爆款分析',
+    desc: '把选题匹配到具体对标',
+    freq: '按选题数',
+    pending: 4,
+    pendingFrom: 'A2',
+    pendingHint: 'Strategy 派来 4 条需爆款分析的选题（W17 选题 1、2、5、6）',
+    lastRun: '2 小时前',
+    status: 'pending',
+    handoffTo: 'A4',
+    instructions: [
+      {
+        id: 'batch-viral',
+        name: '按选题批量抓对标',
+        tip: '每条选题抓 3-5 条对标 + 拆解',
+        template: `对 A2 派来的选题清单逐条抓取对标爆款。
+
+搜索策略：{{strategy}}
+每条选题对标数：{{count}}
+
+每条选题输出：
+1. 匹配对标清单（3-5 条爆款 · 账号 / 数据 / 链接）
+2. 结构拆解（Hook / BGM / 结构 / Hashtag / 评论情绪）
+3. 二创嫁接方案（保留什么 / 换什么）
+4. 派单建议（图文线 / 视频线 / 双线）`,
+        slots: [
+          { key: 'strategy', label: '搜索策略', options: ['四层递进（默认）', '同赛道优先', '跨赛道借鉴'], default: '四层递进（默认）' },
+          { key: 'count', label: '对标数', options: ['3', '5'], default: '3' },
+        ]
+      },
+      {
+        id: 'single-dive',
+        name: '单条爆款深扒',
+        tip: '完整分镜 + 评论情绪',
+        template: `深度拆解一条爆款视频。
+
+选题：{{topic}}
+参考账号或链接：{{source}}
+
+输出：逐秒分镜 + Hook 话术逐字 + BGM 情绪标签 + 评论区情绪聚类 + 转化路径推断`,
+        slots: [
+          { key: 'topic', label: '选题', options: ['China 1st time reaction', 'Chinese food shock', 'Beijing family trip', '自定义'], default: 'China 1st time reaction' },
+          { key: 'source', label: '来源', options: ['自动匹配最相关', '手动粘贴链接'], default: '自动匹配最相关' },
+        ]
+      },
+      {
+        id: 'cross-niche',
+        name: '跨赛道借鉴',
+        tip: '日本游 / 美食 / 文化 迁移',
+        template: `从 {{niche}} 赛道找可迁移的内容结构到入境游。
+
+我们选题方向：{{our_topic}}
+
+输出：3 个跨赛道爆款 + 结构通用性分析 + 迁移方案 + 风险提示`,
+        slots: [
+          { key: 'niche', label: '跨赛道', options: ['日本游', '韩国游', '东南亚游', '美食博主', '文化对比'], default: '日本游' },
+          { key: 'our_topic', label: '选题方向', options: ['城市攻略', '食物震撼', '签证攻略', '费用解构', '文化反差'], default: '食物震撼' },
+        ]
+      }
+    ]
+  },
+
+  A4: {
+    icon: ICONS.A4,
+    name: 'Production',
+    nameCn: '内容制作',
+    desc: '基于对标二创 · 图文 / 视频双线',
+    freq: '按选题数',
+    pending: 2,
+    pendingFrom: 'A3',
+    pendingHint: 'Viral 派来 2 条对标：选题 1（视频线）+ 选题 6（双线）',
+    lastRun: '1 小时前',
+    status: 'pending',
+    subLines: {
+      image: {
+        name: '图文线',
+        iconChar: '🎨',
+        instructions: [
+          {
+            id: 'caption-gen',
+            name: 'Caption + Hashtag',
+            tip: '中英双语 + Hashtag 矩阵',
+            template: `基于 Viral 给的对标，生成 Instagram / 小红书图文文案。
+
+选题：{{topic}}
+平台：{{platform}}
+语言：{{lang}}
+
+输出：Caption 主文 + Hashtag 矩阵 + Save/DM 钩子设计`,
+            slots: [
+              { key: 'topic', label: '选题', options: ['当前激活选题', '手动输入'], default: '当前激活选题' },
+              { key: 'platform', label: '平台', options: ['Instagram', '小红书', '双平台'], default: 'Instagram' },
+              { key: 'lang', label: '语言', options: ['English only', '中英双语'], default: '中英双语' },
+            ]
+          },
+          {
+            id: 'image-prompt',
+            name: '图片 Prompt',
+            tip: 'MJ / DALL-E / Nano Banana',
+            template: `生成图片 prompt（多工具格式 + Negative + 品牌色叠加方案）。
+
+场景：{{scene}}
+风格基调：{{style}}
+用途：{{usage}}`,
+            slots: [
+              { key: 'scene', label: '场景', options: ['西安城墙', '桂林山水', '哈尔滨冰雪', '云南民族', '成都茶馆'], default: '西安城墙' },
+              { key: 'style', label: '风格', options: ['电影感史诗', '杂志纪实', 'Vlog 温暖', '超现实奇幻'], default: '电影感史诗' },
+              { key: 'usage', label: '用途', options: ['封面', '主图', '配图'], default: '主图' },
+            ]
+          },
+          {
+            id: 'ig-carousel',
+            name: 'IG Carousel 组装',
+            tip: '7-10 图整套方案',
+            template: `组装 IG Carousel 整套方案。
+
+选题：{{topic}}
+图片数：{{slides}}
+
+每张图输出：主题 + 文字叠加 + 视觉要求
+整体输出：Caption + Hashtag + Save/DM 钩子 + 发布自检`,
+            slots: [
+              { key: 'topic', label: '选题', options: ['当前激活选题', '手动输入'], default: '当前激活选题' },
+              { key: 'slides', label: '图片数', options: ['5', '7', '10'], default: '7' },
+            ]
+          }
+        ]
+      },
+      video: {
+        name: '视频线',
+        iconChar: '🎬',
+        instructions: [
+          {
+            id: 'video-script',
+            name: '视频脚本 + 分镜',
+            tip: '中英双语 · 逐秒分镜',
+            template: `基于对标爆款生成视频脚本 + 分镜。
+
+选题：{{topic}}
+目标平台：{{platform}}
+时长：{{duration}} 秒
+
+输出：
+1. 英文主发脚本（Hook / Setup / Value / Climax / CTA）
+2. 中文辅（团队审阅用）
+3. 逐秒分镜表
+4. 多平台差异化发布建议`,
+            slots: [
+              { key: 'topic', label: '选题', options: ['当前激活选题', '手动输入'], default: '当前激活选题' },
+              { key: 'platform', label: '平台', options: ['TikTok', 'IG Reels', 'YouTube Shorts', '多平台同发'], default: 'TikTok' },
+              { key: 'duration', label: '时长', options: ['15', '30', '45', '60'], default: '30' },
+            ]
+          },
+          {
+            id: 'video-mix-spec',
+            name: '混剪规格单',
+            tip: '节奏 / BGM / 字幕 / 素材',
+            template: `把脚本转为完整混剪规格单。
+
+脚本：{{script_source}}
+
+输出 7 板块：
+1. 节奏板 · 2. 分镜表 · 3. BGM 情绪方案 · 4. 字幕规范
+5. 素材清单 · 6. 剪辑工艺提示 · 7. 多平台差异化`,
+            slots: [
+              { key: 'script_source', label: '脚本', options: ['当前激活脚本', '手动粘贴'], default: '当前激活脚本' },
+            ]
+          },
+          {
+            id: 'video-api-call',
+            name: '调剪辑接口出片',
+            tip: '剪映 / Runway / 可灵',
+            template: `调用剪辑接口出片。
+
+规格单：{{spec_source}}
+接口：{{api}}
+
+输出：
+1. 接口调用参数（JSON 格式）
+2. 预估输出时间
+3. 若接口不可用，降级输出详细人工剪辑指令`,
+            slots: [
+              { key: 'spec_source', label: '规格单', options: ['当前激活规格', '手动粘贴'], default: '当前激活规格' },
+              { key: 'api', label: '接口', options: ['剪映 API（国内）', 'RunwayML（海外创意）', '可灵（AI 生成）', '仅出规格，人工剪'], default: '剪映 API（国内）' },
+            ]
+          }
+        ]
+      }
+    }
+  },
+
+  A5: {
+    icon: ICONS.A5,
+    name: 'Analytics',
+    nameCn: '数据看板',
+    desc: '闭环反馈 · 反哺前端决策',
+    freq: '周 + 月',
+    pending: 0,
+    lastRun: '周日',
+    status: 'idle',
+    handoffTo: null,
+    instructions: [
+      {
+        id: 'weekly-report',
+        name: '本周归因周报',
+        tip: 'Top / Bottom + 共性分析',
+        template: `基于本周发布数据生成归因周报。
+
+时间窗：{{window}}
+关注平台：{{platform}}
+
+输出：
+1. 核心数据表（播放 / 完播 / Bio 点击 / DM 数）
+2. Top 3 内容 + 共性归因
+3. Bottom 2 内容 + 问题诊断
+4. 异常指标根因分析
+5. 询盘意图聚类
+6. 下周调整建议（反哺 Radar / Strategy / Production）`,
+        slots: [
+          { key: 'window', label: '时间窗', options: ['本周', '近 14 天', '本月'], default: '本周' },
+          { key: 'platform', label: '平台', options: ['TikTok', 'Instagram', 'TikTok + IG', 'YouTube Shorts'], default: 'TikTok + IG' },
+        ]
+      },
+      {
+        id: 'dm-cluster',
+        name: '询盘聚类分析',
+        tip: 'DM 意图分层 + 高频问题',
+        template: `分析本期收到的 DM / 评论 / 邮件询问。
+
+时间窗：{{window}}
+数据来源：{{source}}
+
+输出：意图分层（高 / 中 / 低意向）+ 高频问题 Top 10 + 销售跟进优先级建议`,
+        slots: [
+          { key: 'window', label: '时间窗', options: ['本周', '近 14 天', '本月'], default: '本周' },
+          { key: 'source', label: '数据源', options: ['仅 TikTok DM', 'DM + 邮件 + WhatsApp', '全部含评论区'], default: 'DM + 邮件 + WhatsApp' },
+        ]
+      },
+      {
+        id: 'next-week-advice',
+        name: '下周调整建议',
+        tip: '反哺 Radar / Strategy',
+        template: `基于本周数据给出下周具体调整建议。
+
+反哺目标：{{target}}
+
+输出针对不同 Agent 的具体调整动作（带"一键应用"按钮）`,
+        slots: [
+          { key: 'target', label: '反哺目标', options: ['Radar（扫描范围）', 'Strategy（选题方向）', 'Production（SOP）', '全部'], default: '全部' },
+        ]
+      }
+    ]
+  }
+};
+
+/* ============================================================
+   TEMPLATES
+   ============================================================ */
+
+const TEMPLATES = {
+  content: [
+    { name: 'Hook + 正文 + CTA 通用结构', preview: `# 通用内容结构\n\n**Hook（前 3 秒）**\n- 身份标记法：直接告诉算法"这条给谁看"\n- 反差冲击：打破预期认知\n- 数据锚定：具体数字建立可信度\n\n**正文（15-45 秒）**\n- 建立场景 → 交付价值 → 情绪高潮\n\n**CTA（最后 5 秒）**\n- 引导评论 / 点击 Bio / 关注\n- 一条内容只做一个 CTA，不混用` },
+    { name: 'Instagram Carousel 7 图', preview: `# IG Carousel 7 图模板\n\n第 1 张：Hook（大字 + 反常识）\n第 2 张：建立认知（问题 / 对比）\n第 3-5 张：核心内容（每张一个 key insight）\n第 6 张：行动建议\n第 7 张：CTA + Save + DM 关键词\n\n设计规则：\n- 品牌色一致\n- 字体不超过 2 种\n- 每张图都有"看下一张"的悬念钩子` },
+    { name: 'TikTok 60s 脚本结构', preview: `# TikTok 60 秒脚本\n\n**0-3s**：Hook（身份 / 反差 / 数据）\n**3-10s**：Setup（场景铺垫）\n**10-45s**：Value（核心 1-3 点）\n**45-55s**：Climax（情绪高潮 / 金句）\n**55-60s**：CTA（引导行动）\n\n**四信号对齐**：文字 + 语音 + 画面 + hashtag 必须指向同一客群` },
+    { name: 'Hashtag 矩阵', preview: `# Hashtag 矩阵\n\n一条视频用 3-5 个标签：\n\n**层 1 · 大类**：#ChinaTravel #VisitChina\n**层 2 · 垂直**：#BeijingTour #XianTravel\n**层 3 · 主题**：#ChinaFood #FamilyTravel\n**层 4 · 客源**：#AmericanInChina` },
+  ],
+  image: [
+    { name: '西安 · 风格卡', preview: `# 西安\n\n**视觉基调**：古都厚重 × 烟火气 × 金黄夕阳\n**主色**：#C9A063 #8B3A1E #F5E6D3\n\n**MJ Prompt**：\nancient Xi'an city wall at golden hour, warm tungsten glow,\nbustling Muslim Quarter street food, cinematic 35mm film grain` },
+    { name: '桂林 · 风格卡', preview: `# 桂林\n\n**基调**：山水写意 × 雾气 × 冷调青绿\n**主色**：#6B8E7F #2C3E3A #D8E3DC\n\n**MJ**：Li River karst mountains in morning mist, bamboo raft drifting, Kodak Portra 400` },
+    { name: '哈尔滨 · 风格卡', preview: `# 哈尔滨\n\n**基调**：冰雪梦境 × 俄式建筑 × 蓝紫夜光\n**主色**：#2E4C8B #F0F4FA #D4E1F5\n\n**MJ**：Harbin Ice Festival illuminated sculptures at night, blue-purple LED glow, long exposure` },
+    { name: '构图规则 · 通用', preview: `# 构图规则\n\n**前 / 中 / 背 三层**\n- 前景：人 / 食物特写\n- 中景：活动主体\n- 背景：地标环境\n\n**光线**：TikTok 强反差 / IG 柔光 / YT 前景打亮\n\n**比例**：9:16 / 1:1 / 16:9` },
+  ],
+  video: [
+    { name: '节奏板 · Hook+Peak', preview: `# 节奏板\n\n**0-5s Hook**：画面密度极高，快切\n**5-15s Slow**：慢下来建立场景\n**15-45s Value**：中等密度\n**45-55s Peak**：震撼画面 + 金句\n**55-60s CTA**：字幕主场` },
+    { name: '转场指令库', preview: `# 转场\n\n**硬切**（默认）：场景同类、快节奏段\n**叠化 0.3s**：平滑转换\n**Whip Pan**：能量爆发\n**Zoom**：推进到细节\n**Match Cut**：形状匹配高级感` },
+    { name: 'BGM 情绪标签', preview: `# BGM 情绪标签\n\n**Upbeat Travel** 100-120 BPM 热带 House\n**Cinematic Awe** 60-80 BPM 管弦史诗\n**Chill Vlog** 70-90 BPM Lo-fi\n**Emotional Ballad** 60-75 BPM 钢琴\n\n⚠️ 商业账号必须用平台商业音乐库` },
+    { name: '字幕样式', preview: `# 字幕\n\n**主**：英文，居中偏下，白+黑描边 2px\n**辅**：中文，小字，品牌色\n**高亮**：数字 / 金句加粗\n**安全区**：TT/Reels 顶14%+底14%，Shorts 顶10%+底10%` },
+  ],
+  viral: [
+    { name: '@thefamilyabroad Beijing · 340w', preview: `# 爆款拆解\n\n**账号**：@thefamilyabroad（家庭博主 62w 粉）\n**数据**：340w / 16w 赞 / 8.2k 评\n\n**结构**：\n- 0-3s 孩子紧张特写\n- 3-15s 机场接机\n- 15-45s 3 个打破偏见（支付/地铁/路人）\n- 45-60s 父母反思 + CTA\n\n**评论高频**：shocking, safer than, DM me, visa` },
+    { name: '@BudgetFamilyTravels Tokyo · 89w', preview: `# 爆款拆解\n\n**账号**：@BudgetFamilyTravels\n**数据**：89w 播放\n**选题**：7 days Tokyo $2800 family of 4\n\n**结构**：\n- Hook：家庭机场合影 + 大字 "$2800"\n- Day 1-7 分段 + 每段累计\n- BGM Chill Vlog 95 BPM\n- CTA：full breakdown in bio` },
+  ],
+  assets: [
+    { name: 'Logo · 主版本', preview: `# 品牌 Logo\n\n（占位：真实版本会显示 logo.svg 下载入口）\n\n规则：\n- 最小尺寸：32px 高\n- 留白：≥ 字母 X 宽度\n- 禁止：拉伸 / 换色 / 加框` },
+    { name: '品牌色板', preview: `# 品牌色板\n\n**主色**\nAccent #C15F3C\nText #1F1E1B\n\n**辅助**\nSuccess #6B7F5C\nWarning #C9894A\nDanger #B85C5C\n\n**中性**\nMuted #6F6E68\nBorder #E5E3DC\nBg #FAF9F5` },
+  ]
+};
+
+/* ============================================================
+   MOCK OUTPUTS
+   ============================================================ */
+
+const MOCK_OUTPUTS = {
+
+  'A1:weekly-brief': `# 入境游 · 本期市场画像周报 · 2026-W16
+
+> 观察期：4/14–4/20 · 客源国：美国 · 平台：TikTok + IG
+
+## 一、目标人群需求变化
+
+**① 家庭游"安全感"关注度持续上升**
+TikTok 搜索词 "china safe for kids" 近 14 天搜索量 +38%，评论区痛点从"general safety"转向"specific scenarios"（地铁 / 夜市 / 支付 / 医疗）。家长的问法越来越具体，说明正从"观望"进入"规划"阶段。
+
+**② 签证紧迫性话题进入第二波高峰**
+#ChinaVisaFree 在美国地区近 14 天 +42%，评论情绪从"好奇"转向"开始规划"。高频问题：I only have 5 days, is it worth the trip?
+
+**③ "不为人知的中国"超过一线城市**
+云南 / 贵州 / 桂林 hashtag 完播率比北京 / 上海高 28%，评论区出现"fatigue of typical China"情绪。
+
+## 二、平台热点聚合
+
+**Top 3 爆款结构共性**：
+- Hook 类型：反常识开场（打破"dangerous China"偏见）占 73%
+- 时长：28–45 秒段落最吃香（完播 + 互动双高）
+- BGM：Cinematic Awe + Chill Vlog 混搭
+- 字幕：双语叠加（英主中辅）明显优于纯英文
+
+**算法动向**：
+- TikTok 对 #ChinaTravel 标签推荐权重近 30 天略降
+- 替代标签 #VisitChina / #ChinaTrip 起量
+- 建议：hashtag 矩阵立即调整
+
+**风险信号**：
+4 月有 2 个中型账号因"未标注 AI 生成"被短期限流，AI 合成图 / 视频必须披露。
+
+## 三、竞对动作追踪
+
+### 同赛道
+
+**China Highlights**
+- 新开 @chinahighlights_family 专线，8 天发 7 条，周节奏翻倍
+- 内容从"攻略"转向"家庭视角"
+- 信号：识别同一蓝海，已进入快速跟进期
+
+**WildChina**
+- "我们的西藏线路是怎么设计的"幕后 vlog 转化惊人
+- 评论区 60% 在问价格 / "can you do for my group"
+
+**6 人游 Nihao China**
+- 近 30 天无新内容
+- 信号：可能在调整策略
+
+### 跨赛道
+
+**@JapanByJane**（85w 粉）发了 "Why I'm planning my first China trip"，播放 95w
+- 信号：日本游博主开始向中国内容迁移
+
+---
+
+## 交付说明
+
+**本周报仅含市场信号，不含选题建议。**
+选题请运行 A2 · Strategy · 本周选题建议，系统会自动读取本报告作为输入。
+
+## 建议写入 MEMORY
+
+- [ ] "家庭游安全感"持续上升，下月计划需加权
+- [ ] TikTok hashtag 矩阵需立即调整（#ChinaTravel → #VisitChina）
+- [ ] 跨赛道日本游博主的 China 迁移信号值得持续追踪`,
+
+  'A2:weekly-topics': `# 2026-W17 本周选题建议 · 7 条
+
+> 主推：美国市场 · 平台：TikTok + IG · 基于 W16 Radar 画像 + Analytics 反馈
+
+## 引用上游
+
+- **Radar 信号**：家庭安全感 +38% · Visa 紧迫 +42% · #VisitChina 替代 #ChinaTravel
+- **Analytics 反馈**：上周 Bio 点击率 -0.5pp，CTA 必须带"DM 关键词"而非通用"in bio"
+- **月度 Campaign**：家庭游切入北美 · 第 2 阶段（预算透明化 + 行程简化）
+
+## 本周选题表
+
+| # | 优先级 | 标题 | 支柱 | 平台 | 受众 | Hook 方向 | 业务价值 | 需爆款分析 |
+|---|---|---|---|---|---|---|---|---|
+| 1 | 必做 | Our 5-day Beijing trip cost — family of 4 | Help | TK+IG | 家长决策人 | 数字锚定 | L0 PDF → L1"预算可控" | ✅ |
+| 2 | 必做 | I was nervous. Day 1 in China proved me wrong | Hero | TikTok | 观望家长 | 反常识叙事 | L1"安全放心" | ✅ |
+| 3 | 必做 | 7 hours in Xi'an — what to skip, what not to miss | Help | IG | 自助规划家庭 | 效率前置 | L0 PDF + L2 线索 | ❌ |
+| 4 | 必做 | Why American families should do this in 2026 | Nudge | TK+IG | 观望家庭 | 时效紧迫 | L0 + L1"再不做就晚" | ❌ |
+| 5 | 可做 | We asked our kids — Tokyo vs Beijing | Hero | TikTok | 北美家长 | 对标反差 | 品牌认知 | ✅ |
+| 6 | 可做 | $3 breakfast in China broke us | Hub | TikTok | 通吃 | 价格冲击 | L0 PDF | ✅ |
+| 7 | 观望 | Metro with kids in China — survival guide | Help | IG | 带娃家庭 | 场景化实用 | L1"规划门槛低" | ❌ |
+
+## 本周取舍说明
+
+- 舍弃"春天赏花" / "国庆预热"类（不匹配北美家庭决策窗口）
+- 云南 / 贵州放到月末做（子方向 3 加权）
+- **所有 CTA 必须带"DM 关键词"**（Analytics 反馈的硬约束）
+
+## 派单建议
+
+- **需爆款分析**的选题（1、2、5、6）→ 自动派给 A3
+- **无需爆款分析**的选题（3、4、7）→ 可直接进 A4（3 双线 / 4 视频 / 7 图文）
+
+## 建议写入 MEMORY
+
+- [ ] W17 Hit 组合：预算透明 × 家庭视角 × DM 关键词 CTA
+- [ ] Hashtag 矩阵已切换：#VisitChina 为主
+- [ ] Metro 类 Help 选题风险 → 需要情绪钩子而非功能型 Hook`,
+
+  'A3:batch-viral': `# 按选题批量抓对标 · 2026-W17
+
+> 输入：A2 派来 4 条需爆款分析的选题
+
+## 选题 1 · Our 5-day Beijing trip cost (family of 4)
+
+### 匹配对标
+
+**对标 A · @BudgetFamilyTravels "7 days Tokyo $2,800"** · 89w 播放
+- Hook（0-3s）：家庭机场合影 + 大字"$2,800"
+- 结构：Day 1-7 分段，每段结尾"Total so far: $XXX"
+- 时长：58s · BGM：Chill Vlog 95 BPM
+- 评论高频："breakdown please"、"is airbnb included"
+
+**对标 B · @BackpackerKid "Singapore 5 days $1500 with baby"** · 120w
+- Hook：婴儿笑脸 + 预算数字
+- 双语字幕（英主简中辅）
+
+**对标 C · @ThaiFamilyAbroad "Bangkok $50/day per person"** · 73w
+- 按类别分段（住 / 吃 / 交通 / 景点）
+
+### 结构共性
+
+| 要素 | 共性 |
+|---|---|
+| Hook | 家庭合影 + 总价大字 |
+| 结构 | 按天或按类别 + 累计显示 |
+| CTA | full breakdown in bio → PDF 下载 |
+| 时长 | 50-65 秒最优 |
+
+### 二创嫁接方案
+
+- **保留**：按天分段 + "Total so far" 数字字幕
+- **换场景**：Beijing 替换 Tokyo，加长城 / 故宫 / 后海
+- **换话术**：强调"with 2 kids"（比 backpacker 差异化）
+- **换视觉**：北京胡同 + 豆汁包子 vs 东京拉面
+- **独特钩子**：结尾加"and visa was free"（签证 Nudge 混入）
+- **CTA 调整**：按 Analytics 反馈，改为"DM 'BEIJING' for PDF"
+
+**→ 派单建议：双线（图文 Carousel + TikTok 视频）**
+
+---
+
+## 选题 2 · I was nervous. Day 1 proved me wrong
+
+### 匹配对标
+
+**对标 A · @thefamilyabroad "We brought 3 kids to Beijing"** · 340w
+- Hook：孩子紧张表情 + "everyone told us not to"
+- 结构：0-3s 表情 → 3-15s 接机 → 15-45s 3 个打破偏见 → 45-60s 父母反思 + CTA
+- BGM：Cinematic Awe → Chill Vlog
+- 评论高频：shocking, safer than NYC, visa info
+
+**对标 B · @americanmomasia "First 24 hours in Shanghai"** · 95w
+**对标 C · @foreigner_in_china "I was told China was dangerous"** · 230w
+
+### 结构共性
+
+| 要素 | 共性 |
+|---|---|
+| Hook | 偏见 / 恐惧开场 + 打破预告 |
+| 结构 | 3 个反差瞬间 |
+| 金句 | "everything I was told was wrong" 类 |
+| CTA | full itinerary / DM me |
+
+### 二创嫁接方案
+
+- **保留**：偏见开场 + 3 个打破瞬间 + 金句收尾
+- **换场景**：聚焦家长视角（对标偏 solo traveler）
+- **打破点**：支付 / 夜市 / 带娃地铁 / 酒店接待儿童
+- **CTA**：改为"DM 'BEIJING' for 5-day family itinerary"
+
+**→ 派单建议：视频线（TikTok 口播）**
+
+---
+
+## 选题 5 · We asked our kids: Tokyo vs Beijing
+
+**对标**：@travelwithkids "Banff vs Yosemite kids edition"（45w）
+**嫁接**：快切对比开场 + 3 维评分 + 孩子公投 + 签证彩蛋
+**→ 派单：视频线**
+
+---
+
+## 选题 6 · $3 breakfast in China broke us
+
+**对标**：@cheapeatsworld "Street food Vietnam $1"（180w）
+**嫁接**：3 道菜 × 价格大字 × 美式早餐对比
+**→ 派单：双线（图文 + 视频）**
+
+---
+
+## 派单汇总
+
+| 选题 | 图文线 | 视频线 |
+|---|---|---|
+| 1 · 5-day cost | ✅ Carousel | ✅ TikTok |
+| 2 · Day 1 proved wrong | — | ✅ TikTok |
+| 5 · Tokyo vs Beijing | — | ✅ TikTok |
+| 6 · $3 breakfast | ✅ Reels static | ✅ TikTok |
+
+**人工勾选对标后，系统自动把"对标 + 二创方案"打包传给 A4 对应子线。**`,
+
+  'A4:image:caption-gen': `# 图文线 · Caption + Hashtag
+
+> 选题 1 · Our 5-day Beijing trip cost (family of 4)
+> 对标：@BudgetFamilyTravels · 平台：IG Carousel · 语言：中英双语
+
+## English 主 Caption
+
+**Our family of 4 spent 5 days in Beijing for $1,847 total.**
+
+Everyone told us China would be expensive—or sketchy. Neither was true.
+
+Here's every receipt from our trip (swipe → for full breakdown):
+
+✦ Flights (via Asiana): $1,180
+✦ Hotel × 4 nights (Wangfujing area): $312
+✦ All meals (street food + one fancy dinner): $215
+✦ Subway + taxis: $48
+✦ Entrance fees (Forbidden City + Great Wall): $92
+
+**Total: $1,847** — less than 5 days at Disney World.
+
+And yes, the visa was free (240-hour transit, expires Dec 31, 2026).
+
+Full itinerary + where we stayed is linked in bio.
+**Questions? DM me "BEIJING" 👇**
+
+## 中文辅（团队审阅）
+
+我们一家四口五天北京之行总花费 $1,847。
+
+所有人都说中国贵、不安全——两个都不对。
+以下是每一笔账单（滑动看完整版）：
+
+- 机票：$1,180
+- 酒店 4 晚（王府井附近）：$312
+- 所有餐食：$215
+- 地铁打车：$48
+- 门票（故宫 + 长城）：$92
+
+总计 **$1,847** —— 比迪士尼 5 天便宜。
+
+而且签证免费（240 小时过境，2026-12-31 到期）。
+
+完整行程 bio 链接，有问题 DM "BEIJING"。
+
+## Hashtag 矩阵（IG 5 个）
+
+**#ChinaTravel** · **#FamilyTravel** · **#BeijingWithKids** · **#BudgetFamilyTravel** · **#VisitChina**
+
+**弃用**：#cheapchina（廉价感，不符品牌）、#traveltok（IG 不识别）
+
+## IG Carousel 7 图方案
+
+| # | 图片主题 | 文字叠加 | 视觉要求 |
+|---|---|---|---|
+| 1 | 封面 · 家庭机场合影 + "$1,847" | OUR FAMILY BEIJING TRIP · $1,847 | 强视觉冲击，数字为焦点 |
+| 2 | 长城全家福 | Day 1 · Great Wall · $0 with CityPass | 品牌色边框 |
+| 3 | 胡同早餐 | Day 2 · Street breakfast · $3.50 | 食物特写 |
+| 4 | 故宫合影 | Day 3 · Forbidden City · $60 for family | 金色调 |
+| 5 | 后海夜景 | Day 4 · Houhai · free evening | 夜景 + 灯笼 |
+| 6 | 机场告别 | Day 5 · Going home · receipts don't lie | 收尾轻松 |
+| 7 | CTA · 纯文字 | DM "BEIJING" for full itinerary | 品牌色 + 大字 |
+
+## 钩子设计
+
+- **Save 钩子**：Carousel 第 3-5 张右下角"Save this for later 💾"
+- **DM 钩子**：DM "BEIJING" → 触发 ManyChat 自动回复 PDF
+- **评论引导**：What question would you ask before booking a family China trip?
+
+## 发布前自检
+
+- [ ] 所有数字可核实（来自客户真实行程记录）
+- [ ] 不出现"保证便宜 / 绝对安全"过度承诺
+- [ ] 签证信息已核实（240h 过境到 2026-12-31）
+- [ ] DM 关键词"BEIJING" 已配置 ManyChat 自动回复
+
+---
+
+**下一步**：Caption 通过后进入图片 Prompt 生成环节（7 张图 × MJ prompt）`,
+
+  'A4:video:video-script': `# 视频线 · TikTok 脚本 · 双语
+
+> 选题 2 · I was nervous. Day 1 proved me wrong
+> 对标：@thefamilyabroad · 平台：TikTok · 时长：35s
+
+## English 主发
+
+**[0–3s · Hook]** *女儿机场紧张特写，快速推镜*
+"On the flight, my 10-year-old asked me: 'Mom, are we really going to China?'"
+
+**[3–10s · Setup]** *手持出站画面，傍晚光*
+"Everyone at home said it would be sketchy. Unsafe. Too foreign."
+"I'm American. Two kids. First time in China."
+
+**[10–20s · Value A]** *三组快切：地铁 / 摊主 / 饺子*
+"Day 1, three things shocked me:"
+"One — the subway was cleaner than Manhattan."
+"Two — every stranger waved at my kids."
+
+**[20–28s · Value B]** *夜市手机支付特写*
+"Three — I paid for dinner with my phone. No cash. No card. Done in 2 seconds."
+
+**[28–33s · Climax]** *女儿仰视微笑*
+"That night she asked: 'Can we stay longer?'"
+
+**[33–35s · CTA]** *全屏文字*
+"Our full 5-day family itinerary is in bio. **DM 'BEIJING'** and I'll send it."
+
+## 中文辅（团队审阅）
+
+略（同步骨架，仅用于团队评审用途）
+
+## 分镜表
+
+| 镜 | 时长 | 画面 | 音频 | 字幕主 | 字幕辅 | 转场 |
+|---|---|---|---|---|---|---|
+| S01 | 0:00-0:03 | 女儿机场紧张特写（推镜） | 口播 + 环境底噪 | Mom, are we really going? | 妈，我们真要去？ | 硬切 |
+| S02 | 0:03-0:10 | 手持出站画面 | 口播 + 轻 BGM | 3 句铺垫 | 中文辅 | 叠化 0.3s |
+| S03 | 0:10-0:20 | 快切 × 3（地铁 / 摊主 / 饺子） | 口播强调 | 3 things shocked me | — | 快速硬切 |
+| S04 | 0:20-0:28 | 手机付款特写 | 口播 | No cash. No card. | — | 叠化 |
+| S05 | 0:28-0:33 | 女儿微笑仰视 | 静音 + BGM 高潮 | Can we stay longer? | 能多待几天吗？ | 慢推 |
+| S06 | 0:33-0:35 | 全屏 CTA 文字 | BGM 淡出 | DM 'BEIJING' in bio | — | 淡入 |
+
+**时长校验**：35s = 3 + 7 + 10 + 8 + 5 + 2 ✓
+
+## BGM
+
+**情绪曲线**：Cinematic Awe（0-5s）→ Chill Vlog（5-28s）→ Cinematic Emotional（28-33s）→ 淡出
+
+**候选**（TikTok 商业音乐库搜索）：
+- 方向 1：cinematic piano + strings, 75 BPM, building emotion
+- 方向 2：lo-fi travel vlog, 90 BPM
+
+## 字幕样式
+
+- 主：英文 居中偏下 白+黑描边 2px 占屏高 ~5%
+- 辅：中文 品牌色 #C9A063 占屏高 ~3%
+- 高亮："3 things"、"Can we stay longer" 加粗 + 放大
+- 安全区：顶 14% + 底 14%
+
+## 多平台差异化发布
+
+| 元素 | TikTok | IG Reels | YouTube Shorts |
+|---|---|---|---|
+| 标题 | Mom, are we going to China? 👀 | Day 1 changed everything | First 35s in China |
+| Hashtag | #ChinaTravel #FamilyTravel #MomInChina | #ChinaTrip #FamilyVlog #VisitChina | #ChinaTravel #Shorts |
+| CTA | DM 'BEIJING' | Link in bio | Subscribe + link |
+
+---
+
+## 下一步
+
+脚本通过后 →
+1. 进入 **混剪规格单** 指令，产出完整 7 板块规格
+2. 或直接 **调剪辑接口出片**（剪映 API / RunwayML / 可灵）`,
+
+  'A5:weekly-report': `# 2026-W16 · 归因周报
+
+> 时间窗：4/14-4/20 · 平台：TikTok + IG · 发布 6 条（TK 3 + IG 3）
+
+## 一、本周核心数据
+
+| 指标 | 数值 | 周环比 | 健康基准 |
+|---|---|---|---|
+| 总播放量 | 87w | +12% | — |
+| 精准粉丝增长 | 218 | +8% | > 100/周 ✅ |
+| Bio 链接点击率 | **1.3%** | -0.5pp | > 2% ⚠️ |
+| 平均完播率 | 38% | +3pp | > 40% ⚠️ |
+| 评论率 | 1.1% | +0.2pp | > 1% ✅ |
+| DM 收到"CHINA" | 12 条 | +2 | — |
+
+**⚠️ 核心警报**：Bio 点击率连续 2 周下滑，是本周最值得关注的问题。
+
+## 二、Top 3 内容
+
+**🥇 Kids asked if China was safe — Day 1（TikTok）**
+32w 播放 · 完播 52% · 点赞 1.8w
+- 共性：Hook 用孩子提问 + 偏见开场
+- 归因：反常识 × 家庭视角组合威力
+
+**🥈 $3 breakfast in Beijing（TikTok）**
+19w · 完播 46%
+- 共性：数字锚定 + 食物特写
+
+**🥉 7 hours in Xi'an（IG Reels）**
+11w · 保存率 4.2%（高）
+- 共性：实用型标题 + 省时钩子
+
+## 三、Bottom 2 问题
+
+**❌ Metro with kids — survival guide（IG）**
+2.3w · 完播 21% · 0 DM
+- 问题：Hook 太功能性（"guide"），缺情绪钩子
+- 诊断：Help 类需要"我踩过的坑"叙事
+
+**❌ Why American families should do this in 2026（TikTok）**
+3.1w · Bio 点击 5 次 · 0 DM
+- 问题：Nudge 类节奏太快，信息密度不够
+- 诊断：签证时效 Nudge 需至少 20s 铺垫
+
+## 四、Bio 点击率下滑根因
+
+| 周 | Bio 点击率 |
+|---|---|
+| W14 | 2.1% |
+| W15 | 1.8% |
+| W16 | **1.3%** ⚠️ |
+
+**共性问题**：W14 之后 CTA 全部变为"full itinerary in bio"（通用），失去具体动作指令。
+
+**对比**：W13 表现最好的用"DM 'BEIJING' for PDF"（具体关键词），点击率 2.8%。
+
+**结论**：CTA 必须"具体 + 具有不可替代性"。下周所有内容 CTA 回到"DM 关键词"模式。
+
+## 五、询盘聚类（DM 12 条）
+
+| 意图 | 条数 | 高频问题 |
+|---|---|---|
+| 价格询问 | 5 | how much for family of 4 / kids discount |
+| 行程咨询 | 4 | 7 days or 10 days better / Beijing + Xi'an time |
+| 签证 | 2 | 240 hour rule detail |
+| 其他 | 1 | 合作邀请 |
+
+**意图分层**：高意向 41% + 中意向 33% + 低意向 25%
+**线索质量**：高+中合计 75%，质量不错
+
+## 六、下周调整建议
+
+### → Radar 扫描方向
+- 本周高分内容全部来自"家庭视角" → 下周**重点扫描家庭游标签**
+- "$3 breakfast" 跑赢 → 补充**"价格对比"类竞对监控**
+
+### → Strategy 选题方向
+- Bio 点击率下滑 → 下周所有选题 CTA **必须带"DM 关键词"**
+- Metro 类翻车 → Help 类 Hook **必须加情绪叙事**
+
+### → Production SOP
+- Nudge 类时长下限 25s（"why 2026" 翻车原因）
+- Help 类必须加 1 个"我踩过的坑"段落
+
+---
+
+## 建议写入 MEMORY
+
+- [ ] W16 Top 3 都来自"家庭视角 × 情绪钩子"
+- [ ] CTA 必须具体化（DM 关键词）
+- [ ] Nudge 类 ≥ 25s`,
+
+};
+
+/* ============================================================
+   状态 + 渲染
+   ============================================================ */
+
+const state = {
+  activeAgent: 'A1',
+  activeSubLine: 'image',
+  mode: 'fixed',
+  activeInstruction: 0,
+  slotValues: {},
+  output: null,
+  libTab: 'content',
+  sessions: [
+    { id: 's1', agent: 'A1', title: 'W16 市场画像周报', status: 'approved', time: '今晨' },
+    { id: 's2', agent: 'A2', title: 'W17 周选题建议 · 7 条', status: 'approved', time: '昨天' },
+    { id: 's3', agent: 'A3', title: 'W17 批量爆款拆解（4 条）', status: 'pending', time: '2 小时前' },
+    { id: 's4', agent: 'A4', title: 'IG Carousel · $1847 账单', status: 'pending', time: '1 小时前' },
+    { id: 's5', agent: 'A5', title: 'W15 归因周报', status: 'approved', time: '上周日' },
+  ],
+  freeChat: []
+};
+
+async function init() {
+  renderAgentList();
+  loadAgent('A1');
+  renderLibrary();
+  await loadSessionsFromAPI();
+  if (USE_REAL_API) {
+    // 顶栏状态提示
+    const header = document.querySelector('header span.text-\\[11px\\].text-app-subtle');
+    if (header) header.textContent = 'v0.3 · 🟢 接真实 LLM';
+  }
+}
+
+function renderAgentList() {
+  const el = document.getElementById('agent-list');
+  el.innerHTML = Object.entries(AGENTS).map(([id, a]) => `
+    <div class="agent-card ${state.activeAgent === id ? 'active' : ''}"
+         onclick="loadAgent('${id}')">
+      ${a.pending > 0 ? `<div class="pending-badge">${a.pending}</div>` : ''}
+      <div class="flex items-start gap-2.5">
+        <div class="agent-icon">${a.icon}</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-baseline gap-1.5">
+            <span class="font-serif font-semibold text-[13.5px]">${a.name}</span>
+            <span class="text-[11px] text-app-muted">${a.nameCn}</span>
+          </div>
+          <div class="text-[11px] text-app-muted mt-0.5 leading-snug">${a.desc}</div>
+          <div class="flex items-center gap-1.5 mt-2 text-[10.5px]">
+            <span class="dot dot-${a.status}"></span>
+            <span class="text-app-subtle">${a.lastRun}</span>
+            <span class="ml-auto freq-badge">${a.freq}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function loadAgent(id) {
+  state.activeAgent = id;
+  state.activeInstruction = 0;
+  state.output = null;
+  state.freeChat = [];
+  const a = AGENTS[id];
+
+  document.getElementById('current-agent-icon').innerHTML = a.icon;
+  document.getElementById('current-agent-name').innerHTML = `${a.name} <span class="text-app-muted text-[13px] font-normal">· ${a.nameCn}</span>`;
+  document.getElementById('current-agent-desc').textContent = a.desc;
+
+  // 处理 A4 子线
+  const hasSubLines = !!a.subLines;
+  document.getElementById('subline-area').classList.toggle('hidden', !hasSubLines);
+  if (hasSubLines) {
+    state.activeSubLine = 'image';
+    renderSubLineTabs();
+  }
+
+  // 处理上游派单提示
+  const hint = document.getElementById('inflow-hint');
+  if (a.pending > 0 && a.pendingHint) {
+    hint.classList.remove('hidden');
+    document.getElementById('inflow-text').innerHTML = `
+      <span class="chip" style="border-color: var(--accent); color: var(--accent); background: var(--accent-bg);">
+        上游 · ${a.pendingFrom}
+      </span>
+      <span class="ml-2">${a.pendingHint}</span>
+    `;
+  } else {
+    hint.classList.add('hidden');
+  }
+
+  // 处理 handoff 按钮
+  document.getElementById('handoff-btn').classList.toggle('hidden', !a.handoffTo);
+  if (a.handoffTo) {
+    document.getElementById('handoff-btn').innerHTML = `→ 派给 ${AGENTS[a.handoffTo].name}`;
+  }
+
+  renderAgentList();
+  renderInstructionPicker();
+  selectInstruction(0);
+
+  document.getElementById('output-area').classList.add('hidden');
+  document.getElementById('feedback-card').classList.add('hidden');
+  document.getElementById('free-chat').innerHTML = '';
+  setMode('fixed');
+}
+
+function renderSubLineTabs() {
+  const a = AGENTS[state.activeAgent];
+  if (!a.subLines) return;
+  const el = document.getElementById('subline-tabs');
+  el.innerHTML = Object.entries(a.subLines).map(([key, line]) => `
+    <button class="subline-btn ${state.activeSubLine === key ? 'active' : ''}"
+            onclick="setSubLine('${key}')">
+      <span style="font-size: 14px;">${line.iconChar}</span>
+      ${line.name}
+    </button>
+  `).join('');
+  document.getElementById('subline-inflow').textContent =
+    state.activeSubLine === 'image'
+      ? '当前产线：图文线（Caption / 图片 prompt / Carousel）'
+      : '当前产线：视频线（脚本 / 混剪规格 / 剪辑接口）';
+}
+
+function setSubLine(line) {
+  state.activeSubLine = line;
+  state.activeInstruction = 0;
+  renderSubLineTabs();
+  renderInstructionPicker();
+  selectInstruction(0);
+  document.getElementById('output-area').classList.add('hidden');
+}
+
+function getCurrentInstructions() {
+  const a = AGENTS[state.activeAgent];
+  return a.subLines ? a.subLines[state.activeSubLine].instructions : a.instructions;
+}
+
+function renderInstructionPicker() {
+  const instructions = getCurrentInstructions();
+  const el = document.getElementById('instruction-picker');
+  el.innerHTML = instructions.map((ins, i) => `
+    <button class="ins-btn ${state.activeInstruction === i ? 'active' : ''}"
+            onclick="selectInstruction(${i})">
+      <div class="font-medium text-[12.5px] text-app">${ins.name}</div>
+      <div class="text-[10.5px] text-app-subtle mt-1">${ins.tip || ins.slots.map(s => s.label).join(' · ')}</div>
+    </button>
+  `).join('');
+}
+
+function selectInstruction(i) {
+  state.activeInstruction = i;
+  const ins = getCurrentInstructions()[i];
+  state.slotValues = {};
+  ins.slots.forEach(s => state.slotValues[s.key] = s.default);
+  renderInstructionPicker();
+  renderSlots();
+  renderPromptPreview();
+}
+
+function renderSlots() {
+  const ins = getCurrentInstructions()[state.activeInstruction];
+  const el = document.getElementById('slots-area');
+  el.innerHTML = ins.slots.map(s => `
+    <div class="flex items-center gap-2 px-3 py-1.5 border border-app rounded-lg bg-app-card">
+      <span class="text-[11px] text-app-subtle font-medium">${s.label}</span>
+      <select onchange="updateSlot('${s.key}', this.value)" class="!py-0 !pr-6 !pl-0 !border-0 !bg-transparent text-[12.5px] font-medium" style="padding:0 20px 0 0; background-position: right 2px center;">
+        ${s.options.map(o => `<option value="${o}" ${o === state.slotValues[s.key] ? 'selected' : ''}>${o}</option>`).join('')}
+      </select>
+    </div>
+  `).join('');
+}
+
+function updateSlot(key, value) {
+  state.slotValues[key] = value;
+  renderPromptPreview();
+}
+
+function renderPromptPreview() {
+  const ins = getCurrentInstructions()[state.activeInstruction];
+  let txt = ins.template;
+  Object.entries(state.slotValues).forEach(([k, v]) => {
+    txt = txt.replaceAll(`{{${k}}}`, v);
+  });
+  document.getElementById('prompt-preview').value = txt;
+}
+
+function resetPrompt() {
+  renderPromptPreview();
+  showToast('已重置为预装指令');
+}
+
+function setMode(mode) {
+  state.mode = mode;
+  document.getElementById('fixed-mode').classList.toggle('hidden', mode !== 'fixed');
+  document.getElementById('free-mode').classList.toggle('hidden', mode !== 'free');
+  document.getElementById('mode-fixed').classList.toggle('active', mode === 'fixed');
+  document.getElementById('mode-free').classList.toggle('active', mode === 'free');
+}
+
+/* ============================================================
+   运行 Agent
+   ============================================================ */
+
+// 全局开关：是否调真实 API。true = 调后端；false = 用本地 mock（文件直接双击打开时生效）
+const USE_REAL_API = (location.protocol === 'http:' || location.protocol === 'https:');
+
+async function runAgent() {
+  const ins = getCurrentInstructions()[state.activeInstruction];
+  const agent = AGENTS[state.activeAgent];
+  const userPrompt = document.getElementById('prompt-preview').value;
+
+  const btn = document.getElementById('run-btn');
+  btn.disabled = true;
+  btn.innerHTML = `<svg class="animate-spin" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg> 生成中…`;
+
+  const out = document.getElementById('output-area');
+  out.classList.remove('hidden');
+  document.getElementById('feedback-card').classList.add('hidden');
+  document.getElementById('output-dot').className = 'dot dot-pending';
+  document.getElementById('output-status').outerHTML = '<span id="output-status" class="chip chip-pending">generating · 生成中</span>';
+  document.getElementById('output-content').innerHTML = '<span class="typing-cursor"></span>';
+  out.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
+  if (!USE_REAL_API) {
+    return runAgentMock(ins);
+  }
+
+  try {
+    const response = await fetch('/api/run', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        agent_id: state.activeAgent,
+        sub_line: agent.subLines ? state.activeSubLine : null,
+        instruction_id: ins.id,
+        instruction_name: ins.name,
+        user_prompt: userPrompt,
+        pull_upstream: true,
+      }),
+    });
+
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let fullOutput = '';
+    const contentEl = document.getElementById('output-content');
+    const outArea = document.getElementById('output-area');
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        try {
+          const data = JSON.parse(line.slice(6));
+          if (data.error) throw new Error(data.error);
+          if (data.chunk) {
+            fullOutput += data.chunk;
+            contentEl.innerHTML = renderMd(fullOutput) + '<span class="typing-cursor"></span>';
+            outArea.scrollTop = outArea.scrollHeight;
+          } else if (data.done) {
+            state.currentOutputId = data.output_id;
+            state.currentSessionId = data.session_id;
+            finalizeOutput(fullOutput);
+          }
+        } catch (e) {
+          if (e.message && e.message.startsWith('❌')) throw e;
+          // JSON parse error, ignore
+        }
+      }
+    }
+  } catch (err) {
+    console.error('API 调用失败:', err);
+    document.getElementById('output-content').innerHTML = renderMd(
+      `# ❌ 调用失败\n\n${err.message || err}\n\n**检查步骤**：\n\n1. 后端是否启动：\`uvicorn app:app --reload\`\n2. \`.env\` 是否填了 \`ANTHROPIC_API_KEY\`\n3. 访问 \`http://localhost:8000/api/health\` 看状态`
+    );
+    document.getElementById('output-dot').className = 'dot dot-rejected';
+    document.getElementById('output-status').outerHTML = '<span id="output-status" class="chip chip-rejected">error · 调用失败</span>';
+    btn.disabled = false;
+    btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg> 运行`;
+  }
+}
+
+// 本地 mock 降级（file:// 直接打开时用）
+function runAgentMock(ins) {
+  const key = AGENTS[state.activeAgent].subLines
+    ? `${state.activeAgent}:${state.activeSubLine}:${ins.id}`
+    : `${state.activeAgent}:${ins.id}`;
+  const mockOutput = MOCK_OUTPUTS[key] || generateGenericMock();
+  const out = document.getElementById('output-area');
+  let i = 0;
+  const step = () => {
+    if (i >= mockOutput.length) {
+      state.currentOutputId = 'mock_' + Date.now();
+      finalizeOutput(mockOutput);
+      return;
+    }
+    const chunk = Math.min(mockOutput.length - i, Math.floor(Math.random() * 5) + 2);
+    i += chunk;
+    document.getElementById('output-content').innerHTML = renderMd(mockOutput.slice(0, i)) + '<span class="typing-cursor"></span>';
+    out.scrollTop = out.scrollHeight;
+    setTimeout(step, 13);
+  };
+  setTimeout(step, 450);
+}
+
+function finalizeOutput(text) {
+  state.output = text;
+  document.getElementById('output-content').innerHTML = renderMd(text);
+  document.getElementById('output-dot').className = 'dot dot-pending';
+  document.getElementById('output-status').outerHTML = '<span id="output-status" class="chip chip-pending">pending · 待审核</span>';
+  document.getElementById('output-meta').textContent = `生成于 ${new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}`;
+  document.getElementById('token-usage').textContent = `≈ ${Math.floor(text.length / 2.5)}`;
+  const btn = document.getElementById('run-btn');
+  btn.disabled = false;
+  btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg> 运行`;
+
+  // A5 显示反哺卡片
+  document.getElementById('feedback-card').classList.toggle('hidden', state.activeAgent !== 'A5');
+}
+
+function generateGenericMock() {
+  const a = AGENTS[state.activeAgent];
+  return `# ${a.name} · ${a.nameCn} · 输出（Demo 占位）
+
+> 此处将是真实 LLM 产出。
+
+## 当前指令
+
+${document.getElementById('prompt-preview').value}
+
+## Demo 说明
+
+本页面未接入真实 LLM。真实版本中，会调用 Claude API 按指令产出入境游行业专属内容。
+
+此 mock 展示输出区完整 UI 行为：流式打字 · Approve/打回/派单 · Token 统计 · 归档 · A5 反哺按钮。`;
+}
+
+function renderMd(text) {
+  let html = text
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/^### (.*?)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.*?)$/gm, '<h2>$1</h2>')
+    .replace(/^# (.*?)$/gm, '<h1>$1</h1>')
+    .replace(/^&gt; (.*?)$/gm, '<blockquote>$1</blockquote>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`([^`]+?)`/g, '<code>$1</code>');
+
+  // 表格渲染（简化版）
+  html = html.replace(/((?:\|[^\n]*\|\n)+)/g, (match) => {
+    const rows = match.trim().split('\n').map(r => r.split('|').slice(1, -1).map(c => c.trim()));
+    if (rows.length < 2) return match;
+    const [header, sep, ...body] = rows;
+    const isSep = sep.every(c => /^[-: ]+$/.test(c));
+    if (!isSep) return match;
+    return '<table><thead><tr>' + header.map(c => `<th>${c}</th>`).join('') + '</tr></thead>' +
+           '<tbody>' + body.map(r => '<tr>' + r.map(c => `<td>${c}</td>`).join('') + '</tr>').join('') + '</tbody></table>';
+  });
+
+  return html;
+}
+
+/* ============================================================
+   Approve / Reject / Handoff
+   ============================================================ */
+
+async function approveOutput() {
+  if (!state.output) return;
+  if (USE_REAL_API && state.currentOutputId && !state.currentOutputId.startsWith('mock_')) {
+    try {
+      await fetch('/api/approve', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ output_id: state.currentOutputId, note: '' }),
+      });
+    } catch (e) { showToast('⚠ 后端归档失败，仅本地标记'); }
+  }
+  document.getElementById('output-dot').className = 'dot dot-success';
+  document.getElementById('output-status').outerHTML = '<span id="output-status" class="chip chip-success">approved · 已归档</span>';
+  showToast('✓ 已 Approve · 内容已归档');
+  state.sessions.unshift({
+    id: state.currentSessionId || ('s' + Date.now()),
+    agent: state.activeAgent,
+    title: getCurrentInstructions()[state.activeInstruction].name,
+    status: 'approved',
+    time: '刚刚'
+  });
+}
+
+async function rejectOutput() {
+  const note = prompt('打回备注（可填原因，供 Agent 下次参考）：', '');
+  if (note === null) return;
+  if (USE_REAL_API && state.currentOutputId && !state.currentOutputId.startsWith('mock_')) {
+    try {
+      await fetch('/api/reject', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ output_id: state.currentOutputId, note }),
+      });
+    } catch (e) { /* silent */ }
+  }
+  document.getElementById('output-dot').className = 'dot dot-rejected';
+  document.getElementById('output-status').outerHTML = '<span id="output-status" class="chip chip-rejected">rejected · 已打回</span>';
+  showToast(`✗ 已打回${note ? ' · ' + note : ''}`);
+}
+
+function handoffOutput() {
+  const a = AGENTS[state.activeAgent];
+  if (!a.handoffTo) return;
+  const next = AGENTS[a.handoffTo];
+  next.pending = (next.pending || 0) + 1;
+  showToast(`→ 已派给 ${next.name} · ${next.nameCn}（下次运行该 Agent 时会自动把本期产出作为输入）`);
+  renderAgentList();
+}
+
+async function applyFeedback(target) {
+  const a = AGENTS[target];
+  if (!a) return;
+  if (USE_REAL_API && state.currentOutputId && !state.currentOutputId.startsWith('mock_')) {
+    try {
+      await fetch('/api/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          source_output_id: state.currentOutputId,
+          target_agent_id: target,
+          note: `来自本周 Analytics 反哺建议（session ${state.currentSessionId || '—'}）`,
+        }),
+      });
+    } catch (e) { showToast('⚠ 反哺记录失败'); return; }
+  }
+  a.pending = (a.pending || 0) + 1;
+  renderAgentList();
+  showToast(`✓ 已应用到 ${a.name} · ${a.nameCn}（下次运行时作为 MEMORY 注入）`);
+}
+
+// 从后端加载真实 session 历史
+async function loadSessionsFromAPI() {
+  if (!USE_REAL_API) return;
+  try {
+    const res = await fetch('/api/sessions?limit=20');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (Array.isArray(data) && data.length > 0) {
+      state.sessions = data.map(s => ({
+        id: s.id,
+        agent: s.agent_id,
+        title: s.instruction_name || s.instruction_id,
+        status: s.status || 'pending',
+        time: formatRelativeTime(s.created_at),
+      }));
+    }
+  } catch (e) { /* silent, keep mock sessions */ }
+}
+
+function formatRelativeTime(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  const diff = (Date.now() - d.getTime()) / 1000;
+  if (diff < 60) return '刚刚';
+  if (diff < 3600) return Math.floor(diff / 60) + ' 分钟前';
+  if (diff < 86400) return Math.floor(diff / 3600) + ' 小时前';
+  return Math.floor(diff / 86400) + ' 天前';
+}
+
+/* ============================================================
+   自由对话
+   ============================================================ */
+
+function sendFreeMessage() {
+  const input = document.getElementById('free-input');
+  const text = input.value.trim();
+  if (!text) return;
+  state.freeChat.push({ role: 'user', content: text });
+  input.value = '';
+  renderFreeChat();
+  setTimeout(() => {
+    state.freeChat.push({
+      role: 'assistant',
+      content: `收到。真实版本中，${AGENTS[state.activeAgent].name} 会基于当前上下文（已 approve 的历史产出 + 知识库）回复。\n\n你刚才说：「${text}」\n\n典型响应：根据调整要求重新生成一版，关键决策写入 session-log。`
+    });
+    renderFreeChat();
+  }, 700);
+}
+
+function renderFreeChat() {
+  const el = document.getElementById('free-chat');
+  el.innerHTML = state.freeChat.map(m => `
+    <div class="flex gap-2.5 ${m.role === 'user' ? 'justify-end' : ''}">
+      ${m.role === 'assistant' ? `<div class="agent-icon flex-shrink-0">${AGENTS[state.activeAgent].icon}</div>` : ''}
+      <div class="max-w-[78%] rounded-xl px-4 py-2.5 text-[13px] ${m.role === 'user' ? '' : 'bg-app-card border border-app text-app'}" style="${m.role === 'user' ? 'background:var(--bg-deep)' : ''}">
+        <div class="whitespace-pre-wrap leading-relaxed">${m.content}</div>
+      </div>
+      ${m.role === 'user' ? `<div class="w-7 h-7 rounded-full border border-app flex items-center justify-center text-[10.5px] font-medium text-app-muted flex-shrink-0">NK</div>` : ''}
+    </div>
+  `).join('');
+  el.scrollIntoView({ behavior: 'smooth', block: 'end' });
+}
+
+/* ============================================================
+   模板库
+   ============================================================ */
+
+function setLibTab(tab, evt) {
+  state.libTab = tab;
+  document.querySelectorAll('aside.border-l .tab-btn').forEach(b => b.classList.remove('active'));
+  if (evt) evt.target.classList.add('active');
+  renderLibrary();
+}
+
+function renderLibrary() {
+  const items = TEMPLATES[state.libTab] || [];
+  const el = document.getElementById('library-list');
+  el.innerHTML = items.map((t, i) => `
+    <div class="tpl-item" onclick="previewTemplate('${state.libTab}', ${i})">
+      <div class="flex items-start justify-between">
+        <div class="flex-1 min-w-0 pr-2">
+          <div class="font-medium text-[12.5px] text-app leading-snug">${t.name}</div>
+          <div class="text-[10.5px] text-app-subtle mt-1 leading-relaxed">${t.preview.split('\n').filter(l => l.trim() && !l.startsWith('#')).slice(0, 2).join(' ').replace(/\*\*/g, '').slice(0, 75)}${t.preview.length > 75 ? '…' : ''}</div>
+        </div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-app-subtle flex-shrink-0 mt-0.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+  `).join('');
+}
+
+function previewTemplate(tab, i) {
+  const t = TEMPLATES[tab][i];
+  const modal = document.getElementById('modal');
+  document.getElementById('modal-title').textContent = t.name;
+  document.getElementById('modal-body').innerHTML = renderMd(t.preview);
+  document.getElementById('modal-footer').innerHTML = `
+    <button class="btn btn-secondary" onclick="closeModal()">关闭</button>
+    <button class="btn btn-primary" onclick="insertTemplate('${tab}', ${i})">插入到中栏</button>
+  `;
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+}
+
+function insertTemplate(tab, i) {
+  const t = TEMPLATES[tab][i];
+  const textarea = document.getElementById('prompt-preview');
+  textarea.value += '\n\n---\n\n## 参考模板 · ' + t.name + '\n\n' + t.preview;
+  closeModal();
+  showToast(`已插入模板 · ${t.name}`);
+  if (state.mode === 'free') setMode('fixed');
+}
+
+function closeModal() {
+  const modal = document.getElementById('modal');
+  modal.classList.add('hidden');
+  modal.classList.remove('flex');
+}
+
+/* ============================================================
+   Toast + Session
+   ============================================================ */
+
+function showToast(msg) {
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.textContent = msg;
+  document.getElementById('toast-container').appendChild(el);
+  setTimeout(() => el.remove(), 2400);
+}
+
+document.getElementById('session-btn').addEventListener('click', () => {
+  const html = `
+    <div class="space-y-2">
+      ${state.sessions.map(s => `
+        <div class="border border-app rounded-lg p-3 hover:bg-app-subtle cursor-pointer transition">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="agent-icon" style="width:24px;height:24px;">${AGENTS[s.agent]?.icon || ''}</div>
+              <span class="font-serif font-semibold text-[13px]">${AGENTS[s.agent]?.name || s.agent}</span>
+              <span class="chip chip-${s.status}">${s.status}</span>
+            </div>
+            <span class="text-[11px] text-app-subtle">${s.time}</span>
+          </div>
+          <div class="text-[12.5px] text-app-muted mt-1.5 pl-8">${s.title}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+  document.getElementById('modal-title').textContent = '会话历史';
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('modal-footer').innerHTML = `<button class="btn btn-secondary" onclick="closeModal()">关闭</button>`;
+  const modal = document.getElementById('modal');
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+});
+
+init();
+</script>
+</body>
+</html>

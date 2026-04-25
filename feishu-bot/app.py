@@ -42,31 +42,6 @@ BOTS = {
             "  @行业监控官 时间=60 聚焦=Klook最新产品和定价"
         ),
     },
-    "cli_a95d7d4bee389bdf": {
-        "name": "用户洞察官",
-        "secret": "isxsQqUHVsGawTK2IRdVgbrnhRmVhLMp",
-        "workflow": "02-user-insight.yml",
-        "branch_prefix": "agent/02-user-insight",
-        "pool": "collaboration/02-insight-pool",
-        "needs_input": False,
-        "help": "📈 *用户洞察官* — 分析目标客源国用户行为和偏好\n\n直接 @ 我即可运行。",
-    },
-    "cli_a93ff44ec40b5bd3": {
-        "name": "销售支持官",
-        "secret": "JLmOifjO6rECy2Z0xB50nf43Dzhr22Hs",
-        "workflow": "03-sales-cs.yml",
-        "branch_prefix": "agent/03-sales-cs",
-        "pool": "collaboration/03-sales-support-pool",
-        "needs_input": True,
-        "input_key": "conversation",
-        "help": (
-            "💼 *销售支持官* — 分析客户对话，生成跟进建议\n\n"
-            "用法：\n"
-            "  @销售支持官 [粘贴客户对话内容]\n\n"
-            "示例：\n"
-            "  @销售支持官 客户说：我们想做海外社媒但不知道从哪里开始..."
-        ),
-    },
     "cli_a93ffba491229bd9": {
         "name": "内容策略官",
         "secret": "UuhKXfNaZTbYI6YmoS9uigbtbhwpGRXx",

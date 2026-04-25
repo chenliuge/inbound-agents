@@ -1,0 +1,126 @@
+# 目的地本体 · 北京
+id: beijing
+name_cn: 北京
+name_en: Beijing
+alt_names: [Peking]
+cluster: 皇家古都 · 现代首都
+province: 北京
+
+key_selling_points:
+  - 长城（八达岭 / 慕田峪 / 司马台 · 不同段不同风格）
+  - 故宫（紫禁城 · 180w m² · 最大皇宫）
+  - 天安门广场 + 毛主席纪念堂
+  - 颐和园（皇家园林巅峰）
+  - 胡同文化 + 四合院
+  - 北京烤鸭（全聚德 / 大董 / 利群）
+  - 国家大剧院 / 798 艺术区（现代面）
+
+visual_elements:
+  signature_shots:
+    - 长城蜿蜒雄关 · 晨雾或金色夕阳
+    - 故宫红墙黄瓦 · 俯拍对称美
+    - 胡同老北京 · 鸽哨 + 自行车
+    - 天坛祈年殿 · 天圆地方
+    - 北京烤鸭片鸭现场
+  color_palette: ['#8B0000', '#D4AF37', '#2C2C2C']
+  mood: 庄严恢弘 × 烟火胡同 × 皇家红金
+  avoid: 过度灰暗 / 雾霾色调
+
+stories:
+  - 800 年古都（辽金元明清五朝）
+  - 紫禁城 24 位皇帝在此统治
+  - 马可波罗描述的"世界之最繁华都市"
+  - 长城从春秋战国开始修建（2500 年跨度）
+  - 胡同名字里藏着老北京历史
+  - 天坛是皇帝与天对话的地方（天圆地方设计）
+
+audience_fit:
+  history_lovers: 5
+  family_with_kids: 5       # 长城对孩子震撼 + 便利
+  photographers: 5
+  foodies: 4                # 烤鸭 + 胡同美食
+  luxury_travelers: 4
+  backpackers: 4
+  first_time_china: 5       # 首次来华 No.1 首选
+  repeat_china: 3
+
+seasonality:
+  peak_months: [4, 5, 9, 10]
+  shoulder_months: [3, 11]
+  off_months: [7, 8]        # 暑热 + 雷雨
+  avoid_if_possible: [1, 2] # 寒冷 + 雾霾
+  special_events:
+    autumn: 香山红叶（10 月下 · 世界级）
+    winter: 长城雪景（1 月 · 摄影圣地）
+    spring: 故宫玉兰花 / 颐和园桃花（4 月）
+
+recommended_duration:
+  minimum_days: 3           # 长城半天 + 故宫半天 + 胡同半天
+  sweet_spot: 4-5
+  deep_dive: 6-8            # +承德避暑山庄 / +天津
+  half_day_skip: 不推荐
+
+platform_fit:
+  tiktok:
+    formats: [长城震撼开场, 烤鸭 reaction, 胡同 vlog]
+    best_hook_types: [视觉冲击, 美食震惊, 历史数字]
+  instagram:
+    formats: [故宫对称美, 长城落日 Reel, 胡同摄影 Carousel]
+    best_hook_types: [建筑美学, 文化深度]
+  youtube_shorts:
+    formats: [长城段落对比攻略, 3 天 DIY 攻略, 首次来华避坑]
+    best_hook_types: [攻略型, 避坑型]
+
+content_angles:
+  - angle: 首次必打卡型
+    hook: "Your first trip to China should start here"
+    for_audience: first_time_china
+  - angle: 段落对比型
+    hook: "Badaling vs Mutianyu vs Simatai · which Great Wall section"
+    for_audience: photographers
+  - angle: 家庭型
+    hook: "Taking kids to the Great Wall · what we wish we knew"
+    for_audience: family_with_kids
+  - angle: 胡同文化型
+    hook: "A hutong grandpa told us the secret of old Beijing"
+    for_audience: repeat_china
+  - angle: 美食型
+    hook: "$30 Peking duck vs $80 Peking duck · which is worth it"
+    for_audience: foodies
+  - angle: 反常识型
+    hook: "Why I preferred Beijing subway to Tokyo's"
+
+pricing_anchor:
+  day_tour_group: 60-150
+  day_tour_private: 180-400
+  4_day_standard: 400-800
+  private_7_day: 1500-3000
+  luxury_boutique: 3000+
+  compared_to: "Rome 7 days $2500 · Tokyo 7 days $2800"
+
+common_concerns:
+  - 空气质量（冬季雾霾 · 需提前科普）
+  - 长城段选择（很多人不知道 Mutianyu > Badaling）
+  - 故宫抢票（提前 7 天预约，旺季售罄）
+  - 交通（从市区到长城距离远）
+  - 天气冷（10 月之后需预警保暖）
+
+differentiators_vs:
+  xian: 更现代 + 更便利，但少了丝路历史厚度
+  shanghai: 政治文化中心 vs 上海的商业中心
+  tokyo: 历史厚度更深 + 价格 60% + 震撼度大
+  seoul: 建筑规模和历史跨度都碾压
+
+combo_suggestions:
+  - combo: 北京 + 西安
+    duration: 7-9 天
+    angle: 经典双城（首次来华最推荐）
+  - combo: 北京 + 上海
+    duration: 6-8 天
+    angle: 古今双都（商务延伸首选）
+  - combo: 北京 + 承德
+    duration: 5-7 天
+    angle: 皇家文化深度
+  - combo: 北京 + 平遥 + 西安
+    duration: 10-12 天
+    angle: 三古都连线（史诗级路线）

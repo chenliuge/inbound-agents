@@ -1,0 +1,136 @@
+# 目的地本体 · 云南（作为多地组合）
+id: yunnan
+name_cn: 云南
+name_en: Yunnan
+alt_names: [Yunnan Province]
+cluster: 多元民族 · 彩云之南 · 深度慢游
+province: 云南
+
+# 注：云南本体覆盖昆明 / 大理 / 丽江 / 香格里拉 / 西双版纳 5 个核心节点
+
+key_selling_points:
+  - 大理洱海（骑行 / 苍山日出）
+  - 丽江古城（世界遗产 · 纳西族）
+  - 香格里拉（藏地风情 · 松赞林寺）
+  - 元阳梯田（哈尼族 1300 年梯田）
+  - 西双版纳（傣族泼水节 · 热带雨林）
+  - 玉龙雪山 + 蓝月谷
+  - 云南少数民族文化（25 个民族）
+
+visual_elements:
+  signature_shots:
+    - 元阳梯田晨雾 · 金色日出
+    - 洱海苍山倒影 · 白族建筑
+    - 丽江古城屋顶俯拍 · 远处雪山
+    - 傣族泼水节 · 水花四溅
+    - 玉龙雪山蓝月谷冰川水
+    - 哈尼族 / 白族 / 纳西族传统服饰
+  color_palette: ['#E8A13F', '#5B8A3A', '#C64545']
+  mood: 多元民族 × 彩云之南 × 饱和暖色
+  avoid: 单一汉族视角 / 过于冷调
+
+stories:
+  - 云南 25 个少数民族（中国最多元省份）
+  - 马帮茶马古道起点（千年贸易）
+  - 丽江古城 1997 年入选世界遗产
+  - 哈尼梯田 1300 年人工奇迹（世界遗产）
+  - 香格里拉名字源于小说《消失的地平线》
+  - 大理是南诏国 + 大理国千年都城（金庸小说原型）
+
+audience_fit:
+  history_lovers: 3
+  family_with_kids: 3       # 节奏慢 + 高原反应风险
+  photographers: 5          # 摄影天堂
+  foodies: 4                # 米线 / 菌菇 / 傣味
+  luxury_travelers: 4       # 丽江 / 大理高端酒店多
+  backpackers: 5
+  first_time_china: 2       # 不适合首次
+  repeat_china: 5           # 二次深度首选
+  cultural_explorers: 5     # 民族文化深度
+
+seasonality:
+  peak_months: [3, 4, 9, 10, 11]
+  shoulder_months: [5, 6]
+  off_months: [7, 8]        # 雨季（路况差）
+  avoid_if_possible: []     # 四季都可
+  special_events:
+    spring: 大理三月街 + 油菜花
+    summer: 野生菌季（7-9 月 · 美食家圣节）
+    autumn: 元阳梯田灌水（11 月 · 世界级）
+    winter: 西双版纳热带避寒（12-2 月）
+    april: 傣族泼水节（4 月中 · 独一无二）
+
+recommended_duration:
+  minimum_days: 4           # 至少走 1-2 个节点
+  sweet_spot: 7-10          # 大理 + 丽江 + 香格里拉
+  deep_dive: 12-15          # 5 节点全走
+  half_day_skip: 不适合
+
+platform_fit:
+  tiktok:
+    formats: [梯田航拍震撼, 傣族泼水节 vlog, 民族服饰变装]
+    best_hook_types: [视觉震撼, 民族文化, 异域风情]
+  instagram:
+    formats: [梯田四季 Carousel, 民族服饰摄影集, 慢生活 Reel]
+    best_hook_types: [纪实美学, 文化深度, Wanderlust]
+  youtube_shorts:
+    formats: [云南 10 天路线, 大理慢生活, 元阳梯田朝圣]
+    best_hook_types: [攻略型, 深度游]
+
+content_angles:
+  - angle: 民族文化型
+    hook: "I met 5 ethnic groups in 10 days in Yunnan"
+    for_audience: cultural_explorers
+  - angle: 梯田朝圣型
+    hook: "1300-year-old rice terraces that photographers travel the world for"
+    for_audience: photographers
+  - angle: 慢生活型
+    hook: "Why everyone who visits Yunnan slows down"
+    for_audience: repeat_china
+  - angle: 泼水节型
+    hook: "I got soaked by 10,000 people in Yunnan (on purpose)"
+    for_audience: cultural_explorers
+  - angle: 反常识型
+    hook: "Skip Beijing on your second China trip · come here instead"
+    for_audience: repeat_china
+  - angle: 美食型
+    hook: "$5 mushroom hot pot using 20 varieties of wild fungi"
+    for_audience: foodies
+
+pricing_anchor:
+  day_tour_group: 50-150
+  day_tour_private: 180-400
+  7_day_standard: 800-1800
+  private_10_day: 2500-5000
+  luxury_boutique: 6000+   # Songtsam / Amandayan / Banyan Tree Ringha
+  compared_to: "Bali 10d $1500 · Vietnam 10d $1200"
+
+common_concerns:
+  - 高原反应（香格里拉 3200m）
+  - 路况（山路多 + 雨季塌方）
+  - 节奏慢（适合 7 天起的深度游）
+  - 偏远（飞昆明转机）
+  - 体力要求（徒步较多）
+  - 民族文化真实性（vs 游客化表演）
+
+differentiators_vs:
+  guilin: 多元民族文化 vs 桂林的纯山水
+  sichuan: 更西南 + 更异域 vs 四川的汉文化
+  tibet: 海拔适中 + 签证简单 vs 西藏的严苛
+
+combo_suggestions:
+  - combo: 大理 + 丽江 + 香格里拉
+    duration: 7-10 天
+    angle: 云南经典路线
+  - combo: 昆明 + 元阳梯田
+    duration: 4-5 天
+    angle: 摄影朝圣线
+  - combo: 云南 + 四川（成都 + 九寨沟）
+    duration: 12-15 天
+    angle: 西南深度史诗
+  - combo: 西双版纳 + 老挝
+    duration: 10-12 天
+    angle: 跨境热带文化
+  - combo: 云南 + 上海入境
+    duration: 10-12 天
+    angle: 反差极大的中国（都市 vs 多元民族）

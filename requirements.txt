@@ -5,4 +5,7 @@ ddgs>=1.0.0
 pytest>=8.0.0
 pyyaml>=6.0.0
 requests>=2.31.0
+# 工作台（阶段 B）
+fastapi>=0.100.0
+uvicorn[standard]>=0.27.0
 # yt-dlp>=2024.1.0    # Agent 05 档 2 视频下载：当前未启用，需启用时取消注释
