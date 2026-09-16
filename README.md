@@ -109,3 +109,8 @@ A1 行业监控官 ──┐
 仓库 → Actions 标签页 → 选择对应 Agent → Run workflow → 填参数（如有）→ 点绿色按钮
 
 需要先在 Settings → Secrets → Actions 中添加 `ANTHROPIC_API_KEY`（或 `TRAVEL_AGENTS_PROD`）。
+
+## 飞书 CLI（调试 / AI 直接调用飞书 API）
+
+本地调试 `feishu-bot` 或需要让 Claude Code 直接调用飞书开放平台 API 时，见
+[`feishu-bot/README.md`](feishu-bot/README.md)。
